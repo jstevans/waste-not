@@ -1,0 +1,25 @@
+- [ ] babel-parse all files
+- [ ] use TSConfig to determine potential 'names' for each file? I think on transpiled JS, this is taken care of for us
+- [ ] Determine external dependencies for each file
+    - [ ] walk AST for a file
+    - [ ] let visitors call in
+        - [ ] create visitors for the various import/export formats
+            - [ ] `import 'foo'` and derivations
+            - [ ] `export ... from 'foo'` and derivations
+            - [ ] Single-module call imports, which take a module name as their only param
+                - [ ] import()
+                - [ ] require()
+                - [ ] require.resolve()
+                - [ ] require.include()
+                - [ ] require.resolveWeak()
+            - [ ] Variable-length module call imports, which take an array of module names as their first param
+                - [ ] require.ensure()
+                - [ ] require.context(), which also takes whether to include subdirectories as its second param
+- [ ] Build the dependency graph using the files and their external dependencies
+    - [ ] Keep track of cycles of files and files that are leaf nodes
+    - [ ] Edges should be incident to a file, from the files it depends on
+- [ ] Get each file's transitive hash (aka trash) by walking the dependency graph, starting from each cycle and leaf node
+        - [ ] For each leaf node, hash its path+name+contents
+        - [ ] For each cycle, hash all paths+names+contents together in lexical order
+        - [ ] For each other node, hash its path+name+contents together with its dependencies' hashes in lexical order
+- [ ] Build a list of files and hashes
