@@ -3,13 +3,13 @@ import { stringLiteral, binaryExpression, emptyStatement, booleanLiteral } from 
 
 describe("getStringPattern", () => {
     it("returns a string with no warnings, given a string", () => {
-        const results = getStringPattern(stringLiteral("a"));
+        const results = getStringPattern("", stringLiteral("a"));
         expect(results.warnings).toHaveLength(0);
         expect(results.depPattern).toEqual("a");
     })
 
     it("returns a string with no warnings, given an addition of strings", () => {
-        const results = getStringPattern(
+        const results = getStringPattern("",
             // "c" + "a" + "b"
             binaryExpression(
                 "+",
@@ -23,7 +23,7 @@ describe("getStringPattern", () => {
     })
 
     it("returns a string with warnings, given any non-addition arithmetic of strings", () => {
-        const results = getStringPattern(
+        const results = getStringPattern("",
             // "c" + "a" - "b"
             binaryExpression(
                 "-",
@@ -37,7 +37,7 @@ describe("getStringPattern", () => {
     })
 
     it("returns a string with warnings, given any other expression", () => {
-        const results = getStringPattern(
+        const results = getStringPattern("",
             // "c" + "a" + true
             binaryExpression(
                 "+",

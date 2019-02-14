@@ -1,14 +1,14 @@
 import { Visitor } from "walker/types";
 import addDependency from "./utils/addDependency";
 import addWarning from "./utils/addWarning";
-import getStringPattern from "./utils/getStringPattern";
 import { CallExpression, isIdentifier, } from "@babel/types";
 import isRequireMemberExpression from "./utils/isRequireMemberExpression";
+import getStringPattern from "./utils/getStringPattern";
 
 const SingleModuleRequireCallExpressionVisitor: Visitor<CallExpression> =
     function visitSingleModuleRequireCallExpression(node: CallExpression, state: any) {
         if (isSingleModuleRequireCallExpression(node)) {
-            const { depPattern, warnings } = getStringPattern(node.arguments[0]);
+            const { depPattern, warnings } = getStringPattern("require() call", node.arguments[0]);
             addDependency(depPattern, state);
             warnings.forEach(w => addWarning(w, state));
         }
