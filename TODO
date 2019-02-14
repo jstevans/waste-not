@@ -19,7 +19,7 @@
                 - [x] require.resolveWeak()
             - [ ] Variable-length module call imports, which take an array of module names as their first param
                 - [ ] require.ensure()
-                - [ ] require.context(), which also takes whether to include subdirectories as its second param
+                - [x] require.context(), which also takes whether to include subdirectories as its second param
 - [ ] Build the dependency graph using the files and their external dependencies
     - [ ] Keep track of cycles of files and files that are leaf nodes
     - [ ] Edges should be incident to a file, from the files it depends on
