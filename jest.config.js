@@ -18,5 +18,6 @@ const moduleNameMapper = Object.keys(paths).map(key => {
 module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
+  testMatch: ['**/test/**/*Tests.[jt]s?(x)'],
   moduleNameMapper
 };
