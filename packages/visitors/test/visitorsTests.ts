@@ -4,16 +4,30 @@ import ImportExportDeclarationVisitor from "../src/ImportExportDeclarationVisito
 import RequireContextCallExpressionVisitor from "../src/RequireContextCallExpressionVisitor";
 import RequireEnsureCallExpressionVisitor from "../src/RequireEnsureCallExpressionVisitor";
 import SingleModuleRequireCallExpressionVisitor from "../src/SingleModuleRequireCallExpressionVisitor";
+import TSImportEqualsDeclarationVisitor from "../src/TSImportEqualsDeclarationVisitor";
 
 describe("The VisitorMap", () => {
-    const keys = ['ImportDeclaration', 'ExportAllDeclaration', 'ExportNamedDeclaration', 'CallExpression'];
+    const keys = [
+        'ImportDeclaration',
+        'ExportAllDeclaration',
+        'ExportNamedDeclaration',
+        'CallExpression',
+        'TSImportEqualsDeclaration'
+    ];
     keys.forEach(key => {
         it(`should include '${key}' as a key`, () => {
             expect(visitors).toHaveProperty(key);
         })
     })
 
-    const values = [ImportCallExpressionVisitor, ImportExportDeclarationVisitor, RequireContextCallExpressionVisitor, RequireEnsureCallExpressionVisitor, SingleModuleRequireCallExpressionVisitor];
+    const values = [
+        ImportCallExpressionVisitor,
+        ImportExportDeclarationVisitor,
+        RequireContextCallExpressionVisitor,
+        RequireEnsureCallExpressionVisitor,
+        SingleModuleRequireCallExpressionVisitor,
+        TSImportEqualsDeclarationVisitor
+    ];
     values.forEach(visitor => {
         it(`should include '${visitor.name}' as a value`, () => {
 

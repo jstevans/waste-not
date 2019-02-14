@@ -2,15 +2,15 @@
 - [ ] use TSConfig to determine potential 'names' for each file? I think on transpiled JS, this is taken care of for us
 - [ ] Determine external dependencies for each file
     - [ ] walk AST for a file
-    - [ ] let visitors call in
-        - [ ] create visitors for the various import/export formats
+    - [x] let visitors call in
+        - [x] create visitors for the various import/export formats
             - [x] `import 'foo'`
             - [x] `import * as foo from 'foo'`
             - [x] `import foo from 'foo'`
             - [x] ` import {default as foo, foo2 as foo2 } from 'foo'`
             - [x] `export {...} from 'foo'`
             - [x] `export * from 'foo'`
-            - [ ] `import foo = require('foo')`
+            - [x] `import foo = require('foo')`
             - [x] Single-module call imports, which take a module name as their only param
                 - [x] import()
                 - [x] require()
