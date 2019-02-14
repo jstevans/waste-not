@@ -1,10 +1,10 @@
 import { binaryExpression } from '@babel/types';
 import { tsImportEqualsDeclaration, tsExternalModuleReference } from '@babel/types';
-import visit from '../src/TSImportEqualsDeclarationVisitor';
+import visit from 'visitors/TSImportEqualsDeclarationVisitor';
 import { stringLiteral, identifier, } from '@babel/types';
-import * as addDependency from '../src/utils/addDependency';
-import * as addWarning from '../src/utils/addWarning';
-import * as getStringPattern from '../src/utils/getStringPattern';
+import * as addDependency from 'visitors/utils/addDependency';
+import * as addWarning from 'visitors/utils/addWarning';
+import * as getStringPattern from 'visitors/utils/getStringPattern';
 
 describe('TSImportEqualsDeclarationVisitor', () => {
     const makeImportCall = (ref = stringLiteral('./foo')) => tsImportEqualsDeclaration(

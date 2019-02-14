@@ -1,9 +1,9 @@
 import { Import, memberExpression } from '@babel/types';
-import visit from '../src/SingleModuleRequireCallExpressionVisitor';
+import visit from 'visitors/SingleModuleRequireCallExpressionVisitor';
 import { stringLiteral, identifier, callExpression } from '@babel/types';
-import * as addDependency from '../src/utils/addDependency';
-import * as addWarning from '../src/utils/addWarning';
-import * as getStringPattern from '../src/utils/getStringPattern';
+import * as addDependency from 'visitors/utils/addDependency';
+import * as addWarning from 'visitors/utils/addWarning';
+import * as getStringPattern from 'visitors/utils/getStringPattern';
 
 describe('SingleModuleRequireCallExpressionVisitor', () => {
     const require = identifier("require");

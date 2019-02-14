@@ -1,9 +1,9 @@
 import { Import } from '@babel/types';
-import visit from '../src/ImportCallExpressionVisitor';
+import visit from 'visitors/ImportCallExpressionVisitor';
 import { stringLiteral, identifier, callExpression } from '@babel/types';
-import * as addDependency from '../src/utils/addDependency';
-import * as addWarning from '../src/utils/addWarning';
-import * as getStringPattern from '../src/utils/getStringPattern';
+import * as addDependency from 'visitors/utils/addDependency';
+import * as addWarning from 'visitors/utils/addWarning';
+import * as getStringPattern from 'visitors/utils/getStringPattern';
 
 describe('ImportDeclarationVisitor', () => {
     const makeImport = () => ({type: "Import" } as Import);

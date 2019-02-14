@@ -1,5 +1,5 @@
-import * as walker from '../src/walker';
-import * as walkNode from '../src/walkNode';
+import * as walker from 'walker/walker';
+import * as walkNode from 'walker/walkNode';
 import {
     emptyStatement,
     file,
@@ -45,6 +45,7 @@ describe("walkFile", () => {
         const callArgs: any[] = [];
         jest.spyOn(walkNode, 'default').mockImplementation((...args) => {
             callArgs.push([...args]);
+            return null;
         });
 
         walker.getDependencies(mockFile, {});
@@ -59,6 +60,7 @@ describe("walkFile", () => {
         let visitorsArg;
         jest.spyOn(walkNode, 'default').mockImplementation((node, visitors, state) => {
             visitorsArg = visitors;
+            return null;
         });
 
         const visitorMap = {};
@@ -72,6 +74,7 @@ describe("walkFile", () => {
         let callCount = 0;
         jest.spyOn(walkNode, 'default').mockImplementation((node, visitors, state) => {
             state.test = (state.test || []).concat(callCount++);
+            return null;
         });
 
         const result = walker.getDependencies(mockFile, {});
@@ -92,6 +95,7 @@ describe("walkFile", () => {
             if (visitedNodes.length < mockStatements.length) {
                 return [mockStatements[visitedNodes.length]];
             }
+            return null;
         });
 
         walker.getDependencies(mockFile, {});

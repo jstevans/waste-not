@@ -1,4 +1,4 @@
-import addWarning from "../src/utils/addWarning";
+import addWarning from "visitors/utils/addWarning";
 
 describe("addWarning", () => {
     it("adds a 'warnings' field to state if it doesn't exist", () => {

@@ -1,9 +1,9 @@
 import { memberExpression, numericLiteral } from '@babel/types';
-import visit from '../src/RequireContextCallExpressionVisitor';
+import visit from 'visitors/RequireContextCallExpressionVisitor';
 import { stringLiteral, identifier, callExpression } from '@babel/types';
-import * as addDependency from '../src/utils/addDependency';
-import * as addWarning from '../src/utils/addWarning';
-import * as getStringPattern from '../src/utils/getStringPattern';
+import * as addDependency from 'visitors/utils/addDependency';
+import * as addWarning from 'visitors/utils/addWarning';
+import * as getStringPattern from 'visitors/utils/getStringPattern';
 
 describe('RequireContextCallExpressionVisitor', () => {
     const requireContext = memberExpression(identifier("require"), identifier('context'));

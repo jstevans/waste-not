@@ -1,4 +1,4 @@
-import addDependency from "../src/utils/addDependency";
+import addDependency from "visitors/utils/addDependency";
 
 describe("addDependency", () => {
     it("adds a 'dependencies' field to state if it doesn't exist", () => {

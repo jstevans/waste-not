@@ -1,4 +1,4 @@
-import walkNode from "../src/walkNode";
+import walkNode from "walker/walkNode";
 import { blockStatement, emptyStatement } from "@babel/types";
 
 describe("walkNode", () => {

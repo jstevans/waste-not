@@ -1,10 +1,10 @@
-import visitors from "../src/visitors";
-import ImportCallExpressionVisitor from "../src/ImportCallExpressionVisitor";
-import ImportExportDeclarationVisitor from "../src/ImportExportDeclarationVisitor";
-import RequireContextCallExpressionVisitor from "../src/RequireContextCallExpressionVisitor";
-import RequireEnsureCallExpressionVisitor from "../src/RequireEnsureCallExpressionVisitor";
-import SingleModuleRequireCallExpressionVisitor from "../src/SingleModuleRequireCallExpressionVisitor";
-import TSImportEqualsDeclarationVisitor from "../src/TSImportEqualsDeclarationVisitor";
+import visitors from "visitors/visitors";
+import ImportCallExpressionVisitor from "visitors/ImportCallExpressionVisitor";
+import ImportExportDeclarationVisitor from "visitors/ImportExportDeclarationVisitor";
+import RequireContextCallExpressionVisitor from "visitors/RequireContextCallExpressionVisitor";
+import RequireEnsureCallExpressionVisitor from "visitors/RequireEnsureCallExpressionVisitor";
+import SingleModuleRequireCallExpressionVisitor from "visitors/SingleModuleRequireCallExpressionVisitor";
+import TSImportEqualsDeclarationVisitor from "visitors/TSImportEqualsDeclarationVisitor";
 
 describe("The VisitorMap", () => {
     const keys = [

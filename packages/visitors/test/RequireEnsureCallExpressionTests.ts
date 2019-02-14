@@ -1,9 +1,9 @@
 import { memberExpression, numericLiteral, arrayExpression } from '@babel/types';
-import visit from '../src/RequireEnsureCallExpressionVisitor';
+import visit from 'visitors/RequireEnsureCallExpressionVisitor';
 import { stringLiteral, identifier, callExpression } from '@babel/types';
-import * as addDependency from '../src/utils/addDependency';
-import * as addWarning from '../src/utils/addWarning';
-import * as getStringPattern from '../src/utils/getStringPattern';
+import * as addDependency from 'visitors/utils/addDependency';
+import * as addWarning from 'visitors/utils/addWarning';
+import * as getStringPattern from 'visitors/utils/getStringPattern';
 
 describe('RequireEnsureCallExpressionVisitor', () => {
     const requireEnsure = memberExpression(identifier("require"), identifier('ensure'));

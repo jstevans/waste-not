@@ -1,5 +1,9 @@
 var path = require('path');
 
+var jestConfig = require('./jest.config');
+
+console.log(JSON.stringify(jestConfig.moduleNameMapper));
+
 module.exports = function (w) {
 
   return {
@@ -18,6 +22,12 @@ module.exports = function (w) {
 
     env: {
       type: 'node'
+    },
+
+    compilers: {
+      '**/*.ts?(x)': w.compilers.typeScript({
+        isolatedModules: true
+      })
     },
 
     // or any other supported testing framework:

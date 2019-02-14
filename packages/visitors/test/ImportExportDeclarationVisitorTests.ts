@@ -1,6 +1,6 @@
-import visit from '../src/ImportExportDeclarationVisitor';
+import visit from 'visitors/ImportExportDeclarationVisitor';
 import { importDeclaration, stringLiteral, exportNamedDeclaration, exportSpecifier, identifier, Declaration, exportAllDeclaration } from '@babel/types';
-import * as addDependency from '../src/utils/addDependency';
+import * as addDependency from 'visitors/utils/addDependency';
 
 describe('ImportDeclarationVisitor', () => {
     beforeEach(() => {
