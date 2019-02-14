@@ -4,14 +4,19 @@
     - [ ] walk AST for a file
     - [ ] let visitors call in
         - [ ] create visitors for the various import/export formats
-            - [ ] `import 'foo'` and derivations
-            - [ ] `export ... from 'foo'` and derivations
-            - [ ] Single-module call imports, which take a module name as their only param
-                - [ ] import()
-                - [ ] require()
-                - [ ] require.resolve()
-                - [ ] require.include()
-                - [ ] require.resolveWeak()
+            - [x] `import 'foo'`
+            - [x] `import * as foo from 'foo'`
+            - [x] `import foo from 'foo'`
+            - [x] ` import {default as foo, foo2 as foo2 } from 'foo'`
+            - [x] `export {...} from 'foo'`
+            - [x] `export * from 'foo'`
+            - [ ] `import foo = require('foo')`
+            - [x] Single-module call imports, which take a module name as their only param
+                - [x] import()
+                - [x] require()
+                - [x] require.resolve()
+                - [x] require.include()
+                - [x] require.resolveWeak()
             - [ ] Variable-length module call imports, which take an array of module names as their first param
                 - [ ] require.ensure()
                 - [ ] require.context(), which also takes whether to include subdirectories as its second param
