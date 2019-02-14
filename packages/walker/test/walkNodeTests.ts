@@ -11,7 +11,7 @@ describe("walkNode", () => {
 
     it("calls the right visitor", () => {
         let mockVisitor = jest.fn();
-        walkNode({ type: 'test' } as any, { 'test': mockVisitor } as any, null);
+        walkNode({ type: 'test' } as any, { 'test': [mockVisitor] } as any, null);
 
         expect(mockVisitor).toBeCalledTimes(1);
     })

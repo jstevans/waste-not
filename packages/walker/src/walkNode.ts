@@ -7,9 +7,9 @@ export default function walkNode(node: BaseNode, visitors: VisitorMap, state: an
     if (!node) return null;
 
     const nodesToVisit: BaseNode[] = [];
-    const visitor = visitors[node.type];
-    if (visitor) {
-        visitor(node, state);
+    const relevantVisitors = visitors[node.type];
+    if (relevantVisitors) {
+        relevantVisitors.forEach(visitor => visitor(node, state));
     }
 
     for (let key of VISITOR_KEYS[node.type] || []) {
