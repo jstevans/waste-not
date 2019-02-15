@@ -6,7 +6,6 @@ import {
     Program,
     program,
     Statement,
-    blockStatement,
     BaseNode
 } from '@babel/types';
 
@@ -81,7 +80,9 @@ describe("walkFile", () => {
 
         expect(result).toEqual(
             {
-                test: [0, 1]
+                dependencies: [],
+                test: [0, 1],
+                warnings: []
             }
         )
     })
