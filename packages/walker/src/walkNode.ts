@@ -16,11 +16,17 @@ export default function walkNode(node: BaseNode, visitors: VisitorMap, state: an
         let subNode: BaseNode | BaseNode[] = node[key];
         if (Array.isArray(subNode)) {
             for (let subSubNode of subNode) {
-                nodesToVisit.push(subSubNode);
+                addNodeToVisit(subSubNode, nodesToVisit);
             }
         } else {
-            nodesToVisit.push(subNode);
+            addNodeToVisit(subNode, nodesToVisit);
         }
     }
     return nodesToVisit;
+}
+
+function addNodeToVisit(subNode: BaseNode, nodesToVisit: BaseNode[]) {
+    if(subNode) {
+        nodesToVisit.push(subNode);
+    }
 }

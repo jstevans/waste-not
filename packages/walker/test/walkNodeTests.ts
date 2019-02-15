@@ -1,5 +1,5 @@
 import walkNode from "walker/walkNode";
-import { blockStatement, emptyStatement } from "@babel/types";
+import { blockStatement, emptyStatement, identifier } from "@babel/types";
 
 describe("walkNode", () => {
     describe("safety checks", () => {
@@ -27,5 +27,11 @@ describe("walkNode", () => {
         const result = walkNode(mockNode, {}, null);
 
         expect(result).toEqual(mockNode.body);
+    })
+
+    it("doesn't return undefined children", () => {
+        let mockNode = identifier("test"); // "typeAnnotation" field is undefined
+        const result = walkNode(mockNode, {}, null);
+        expect(result).toHaveLength(0);
     })
 })
