@@ -1,4 +1,4 @@
-import * as walker from 'walker/walker';
+import * as walkFile from 'walker/walkFile';
 import * as walkNode from 'walker/walkNode';
 import {
     emptyStatement,
@@ -15,26 +15,26 @@ const makeMockFile = (...expressions: Statement[]) =>
 describe("walkFile", () => {
     describe("safety checks", () => {
         it("throws if a File is not provided as its first argument", () => {
-            expect(walker.getDependencies).toThrow();
+            expect(walkFile.default).toThrow();
         })
 
         it("throws if the File has no Program", () => {
-            expect(() => walker.getDependencies({} as any, null as any)).toThrow();
+            expect(() => walkFile.default({} as any, null as any)).toThrow();
         })
 
         it("throws if the File's Program has no body", () => {
             const mockFile = file({ type: 'Program' } as Program, null, null);
-            expect(() => walker.getDependencies(mockFile, null as any)).toThrow();
+            expect(() => walkFile.default(mockFile, null as any)).toThrow();
         })
 
         it("throws if VisitorMap is null", () => {
             const mockFile = makeMockFile();
-            expect(() => walker.getDependencies(mockFile, null as any)).toThrow();
+            expect(() => walkFile.default(mockFile, null as any)).toThrow();
         })
 
         it("throws if VisitorMap is not an object", () => {
             const mockFile = makeMockFile();
-            expect(() => walker.getDependencies(mockFile, 3 as any)).toThrow();
+            expect(() => walkFile.default(mockFile, 3 as any)).toThrow();
         })
     });
 
@@ -47,7 +47,7 @@ describe("walkFile", () => {
             return null;
         });
 
-        walker.getDependencies(mockFile, {});
+        walkFile.default(mockFile, {});
 
         expect(walkNode.default).toBeCalledTimes(2);
         expect(callArgs[0][0]).toBe(mockFile.program.body[0]);
@@ -63,7 +63,7 @@ describe("walkFile", () => {
         });
 
         const visitorMap = {};
-        walker.getDependencies(mockFile, visitorMap);
+        walkFile.default(mockFile, visitorMap);
 
         expect(visitorsArg).toBe(visitorMap);
     })
@@ -76,13 +76,11 @@ describe("walkFile", () => {
             return null;
         });
 
-        const result = walker.getDependencies(mockFile, {});
+        const result = walkFile.default(mockFile, {});
 
         expect(result).toEqual(
             {
-                dependencies: [],
                 test: [0, 1],
-                warnings: []
             }
         )
     })
@@ -99,7 +97,7 @@ describe("walkFile", () => {
             return null;
         });
 
-        walker.getDependencies(mockFile, {});
+        walkFile.default(mockFile, {});
 
         expect(visitedNodes).toEqual(mockStatements);
     })

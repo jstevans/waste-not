@@ -1,10 +1,9 @@
-import { WalkerState } from './types';
 import { VisitorMap } from 'walker/types';
 import { File, BaseNode } from '@babel/types';
 import walkNode from './walkNode';
 
 
-export function getDependencies(file: File, visitorMap: VisitorMap) {
+export default function walkFile(file: File, visitorMap: VisitorMap) {
     if (!file.program) {
         throw new Error(`File has no program: ${file.loc}`);
     } else if (!file.program.body) {
@@ -20,13 +19,13 @@ export function getDependencies(file: File, visitorMap: VisitorMap) {
     // the last element is always the next node to visit.
     const nodesToVisit: BaseNode[] = [...body].reverse();
 
-    const dependencies: WalkerState = {dependencies: [], warnings: []};
+    const state: any = {};
     for (let node = nodesToVisit.pop(); node != undefined; node = nodesToVisit.pop()) {
-        const subNodes = walkNode(node, visitorMap, dependencies);
+        const subNodes = walkNode(node, visitorMap, state);
         if (subNodes && subNodes.length > 0) {
             nodesToVisit.push(...[...subNodes].reverse());
         }
     }
 
-    return dependencies;
+    return state;
 }
