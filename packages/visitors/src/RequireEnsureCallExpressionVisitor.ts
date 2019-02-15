@@ -1,14 +1,14 @@
-import { Visitor } from "walker/types";
+import { Visitor, WalkerState } from "walker/types";
 import addDependency from "./utils/addDependency";
 import addWarning from "./utils/addWarning";
-import { CallExpression, isIdentifier, isArrayExpression, Expression, ArrayExpression, isStringLiteral } from "@babel/types";
+import { CallExpression, isIdentifier, isArrayExpression, ArrayExpression, isStringLiteral } from "@babel/types";
 import isRequireMemberExpression from "./utils/isRequireMemberExpression";
 
 const DEPENDENCIES_MUST_BE_ARRAY = "The first argument of a 'require.ensure' call must be an array.";
 const DEPENDENCIES_MUST_BE_STRINGS = "The elements of the first argument of a 'require.ensure' call must be strings.";
 
 const RequireEnsureCallExpressionVisitor: Visitor<CallExpression> =
-    function visitRequireEnsureCallExpressionVisitor(node: CallExpression, state: any) {
+    function visitRequireEnsureCallExpressionVisitor(node: CallExpression, state: WalkerState) {
         if (isRequireEnsureCallExpression(node)) {
             const dependenciesArg = node.arguments[0];
             if (assertArrayExpression(dependenciesArg, state)) {

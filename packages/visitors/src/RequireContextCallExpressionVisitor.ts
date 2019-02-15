@@ -1,4 +1,4 @@
-import { Visitor } from "walker/types";
+import { Visitor, WalkerState } from "walker/types";
 import addDependency from "./utils/addDependency";
 import addWarning from "./utils/addWarning";
 import { CallExpression, isIdentifier, isStringLiteral } from "@babel/types";
@@ -7,7 +7,7 @@ import isRequireMemberExpression from "./utils/isRequireMemberExpression";
 const DEPENDENCIES_MUST_BE_STRINGS = "The elements of the first argument of a 'require.context' call must be strings.";
 
 const RequireContextCallExpressionVisitor: Visitor<CallExpression> =
-    function visitRequireContextCallExpressionVisitor(node: CallExpression, state: any) {
+    function visitRequireContextCallExpressionVisitor(node: CallExpression, state: WalkerState) {
         if (isRequireContextCallExpression(node)) {
             const args = node.arguments;
             args.forEach(element => {
