@@ -6,10 +6,6 @@
     "rootDir": "./packages",
     "strict": true,
     "noImplicitAny": false,
-    "paths": {
-      "visitors/*": ["packages/visitors/src/*"],
-      "walker/*": ["packages/walker/src/*"]
-    },
     "esModuleInterop": true         
   }
 }

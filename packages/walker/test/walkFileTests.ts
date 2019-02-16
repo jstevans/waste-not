@@ -1,5 +1,5 @@
-import * as walkFile from 'walker/walkFile';
-import * as walkNode from 'walker/walkNode';
+import * as walkFile from '../lib/walkFile';
+import * as walkNode from '../lib/walkNode';
 import {
     emptyStatement,
     file,

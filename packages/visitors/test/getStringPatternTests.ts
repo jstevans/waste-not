@@ -1,4 +1,4 @@
-import getStringPattern from "visitors/utils/getStringPattern";
+import getStringPattern from "../lib/utils/getStringPattern";
 import { stringLiteral, binaryExpression, emptyStatement, booleanLiteral } from "@babel/types";
 
 describe("getStringPattern", () => {

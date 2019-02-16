@@ -1,9 +1,9 @@
 import { Import } from '@babel/types';
-import visit from 'visitors/ImportCallExpressionVisitor';
+import visit from '../lib/ImportCallExpressionVisitor';
 import { stringLiteral, identifier, callExpression } from '@babel/types';
-import * as addDependency from 'visitors/utils/addDependency';
-import * as addWarning from 'visitors/utils/addWarning';
-import * as getStringPattern from 'visitors/utils/getStringPattern';
+import * as addDependency from '../lib/utils/addDependency';
+import * as addWarning from '../lib/utils/addWarning';
+import * as getStringPattern from '../lib/utils/getStringPattern';
 
 describe('ImportDeclarationVisitor', () => {
     const makeImport = () => ({type: "Import" } as Import);
@@ -19,7 +19,7 @@ describe('ImportDeclarationVisitor', () => {
     it('calls getStringPattern for an ImportExpression', () => {
         const importCall = callExpression(makeImport(), [stringLiteral("foo")]);
 
-        visit(importCall, null);
+        visit(importCall, null as any);
 
         expect(getStringPattern.default).toBeCalledTimes(1);
     })
@@ -31,7 +31,7 @@ describe('ImportDeclarationVisitor', () => {
             warnings: []
         }));
 
-        visit(importCall, null);
+        visit(importCall, null as any);
 
         expect(addDependency.default).toBeCalledTimes(1);
         expect(addDependency.default).toBeCalledWith("test", null);
@@ -44,7 +44,7 @@ describe('ImportDeclarationVisitor', () => {
             warnings: ['warning']
         }));
 
-        visit(importCall, null);
+        visit(importCall, null as any);
 
         expect(addDependency.default).toBeCalledTimes(1);
         expect(addDependency.default).toBeCalledWith("test", null);
@@ -57,7 +57,7 @@ describe('ImportDeclarationVisitor', () => {
             warnings: ['warning']
         }));
 
-        visit(importCall, null);
+        visit(importCall, null as any);
 
         expect(addWarning.default).toBeCalledTimes(1);
         expect(addWarning.default).toBeCalledWith("warning", null);
@@ -66,7 +66,7 @@ describe('ImportDeclarationVisitor', () => {
     it('ignores any other call expression', () => {
         const nonImportCall = callExpression(identifier("fah"), [stringLiteral("foo")]);
 
-        visit(nonImportCall, null);
+        visit(nonImportCall, null as any);
 
         expect(addDependency.default).toBeCalledTimes(0);
     })

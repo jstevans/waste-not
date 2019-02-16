@@ -1,4 +1,4 @@
-import { VisitorMap } from 'walker/types';
+import { VisitorMap } from '../../walker/lib/types';
 import ImportExportDeclarationVisitor from './ImportExportDeclarationVisitor';
 import ImportCallExpressionVisitor from './ImportCallExpressionVisitor';
 import RequireContextCallExpressionVisitor from './RequireContextCallExpressionVisitor';

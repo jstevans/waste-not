@@ -1,9 +1,9 @@
 import { memberExpression, numericLiteral } from '@babel/types';
-import visit from 'visitors/RequireContextCallExpressionVisitor';
+import visit from '../lib/RequireContextCallExpressionVisitor';
 import { stringLiteral, identifier, callExpression } from '@babel/types';
-import * as addDependency from 'visitors/utils/addDependency';
-import * as addWarning from 'visitors/utils/addWarning';
-import * as getStringPattern from 'visitors/utils/getStringPattern';
+import * as addDependency from '../lib/utils/addDependency';
+import * as addWarning from '../lib/utils/addWarning';
+import * as getStringPattern from '../lib/utils/getStringPattern';
 
 describe('RequireContextCallExpressionVisitor', () => {
     const requireContext = memberExpression(identifier("require"), identifier('context'));
@@ -23,7 +23,7 @@ describe('RequireContextCallExpressionVisitor', () => {
 
             const importCall = callExpression(requireContext, [stringLiteral("foo")]);
 
-            visit(importCall, null);
+            visit(importCall, null as any);
 
             expect(getStringPattern.default).toBeCalledTimes(0);
         })
@@ -31,7 +31,7 @@ describe('RequireContextCallExpressionVisitor', () => {
         it('adds a dependency', () => {
             const importCall = callExpression(requireContext, [stringLiteral("foo")]);
 
-            visit(importCall, null);
+            visit(importCall, null as any);
 
             expect(addDependency.default).toBeCalledTimes(1);
             expect(addDependency.default).toBeCalledWith("foo", null);
@@ -40,7 +40,7 @@ describe('RequireContextCallExpressionVisitor', () => {
         it('adds a warning for each non-string member of the dependencies array', () => {
             const importCall = callExpression(requireContext, [identifier('foo'), numericLiteral(3)]);
 
-            visit(importCall, null);
+            visit(importCall, null as any);
 
             expect(addWarning.default).toBeCalledTimes(2);
         })
@@ -49,7 +49,7 @@ describe('RequireContextCallExpressionVisitor', () => {
     it('ignores any other call expression', () => {
         const nonImportCall = callExpression(identifier("fah"), [stringLiteral("foo")]);
 
-        visit(nonImportCall, null);
+        visit(nonImportCall, null as any);
 
         expect(addDependency.default).toBeCalledTimes(0);
     })

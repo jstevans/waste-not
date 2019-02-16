@@ -1,4 +1,4 @@
-import { Visitor, WalkerState } from "walker/types";
+import { Visitor, WalkerState } from "../../walker/lib/types";
 import addDependency from "./utils/addDependency";
 import addWarning from "./utils/addWarning";
 import { CallExpression, isIdentifier, isStringLiteral } from "@babel/types";

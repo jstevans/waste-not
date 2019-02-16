@@ -1,6 +1,6 @@
 import { ImportDeclaration, ExportAllDeclaration, ExportNamedDeclaration, isImportDeclaration, isExportNamedDeclaration, isExportAllDeclaration } from "@babel/types";
 import addDependency from "./utils/addDependency";
-import { Visitor, WalkerState } from "walker/types";
+import { Visitor, WalkerState } from "../../walker/lib/types";
 
 export type ImportExportDeclaration = ImportDeclaration | ExportAllDeclaration | ExportNamedDeclaration;
 

@@ -1,4 +1,4 @@
-import isRequireMemberExpression from "visitors/utils/isRequireMemberExpression";
+import isRequireMemberExpression from "../lib/utils/isRequireMemberExpression";
 import { memberExpression, logicalExpression, identifier } from "@babel/types";
 
 describe('isRequireMemberExpression', () => {

@@ -1,4 +1,4 @@
-import { VisitorMap } from 'walker/types';
+import { VisitorMap } from './types';
 import { File, BaseNode } from '@babel/types';
 import walkNode from './walkNode';
 

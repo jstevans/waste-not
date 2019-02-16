@@ -1,6 +1,6 @@
 const paths = require('./tsconfig.json').compilerOptions.paths;
 
-const moduleNameMapper = Object.keys(paths).map(key => {
+const moduleNameMapper = Object.keys(paths || {}).map(key => {
   const newKey = `${key.split("*").join("(.*)")}$`;
   const newValue = paths[key].map(path =>
     path.split("*")

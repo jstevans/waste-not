@@ -1,10 +1,10 @@
 import { binaryExpression } from '@babel/types';
 import { tsImportEqualsDeclaration, tsExternalModuleReference } from '@babel/types';
-import visit from 'visitors/TSImportEqualsDeclarationVisitor';
+import visit from '../lib/TSImportEqualsDeclarationVisitor';
 import { stringLiteral, identifier, } from '@babel/types';
-import * as addDependency from 'visitors/utils/addDependency';
-import * as addWarning from 'visitors/utils/addWarning';
-import * as getStringPattern from 'visitors/utils/getStringPattern';
+import * as addDependency from '../lib/utils/addDependency';
+import * as addWarning from '../lib/utils/addWarning';
+import * as getStringPattern from '../lib/utils/getStringPattern';
 
 describe('TSImportEqualsDeclarationVisitor', () => {
     const makeImportCall = (ref = stringLiteral('./foo')) => tsImportEqualsDeclaration(
@@ -23,7 +23,7 @@ describe('TSImportEqualsDeclarationVisitor', () => {
     describe("for import = require() declarations", () => {
         it('does not call getStringPattern', () => {
 
-            visit(makeImportCall(), null);
+            visit(makeImportCall(), null as any);
 
             expect(getStringPattern.default).toBeCalledTimes(0);
         })
@@ -34,7 +34,7 @@ describe('TSImportEqualsDeclarationVisitor', () => {
                 warnings: []
             }));
 
-            visit(makeImportCall(), null);
+            visit(makeImportCall(), null as any);
 
             expect(addDependency.default).toBeCalledTimes(1);
             expect(addDependency.default).toBeCalledWith("./foo", null);
@@ -52,7 +52,7 @@ describe('TSImportEqualsDeclarationVisitor', () => {
                         stringLiteral("./"),
                         stringLiteral("foo"))
                 }
-            } as any, null);
+            } as any, null as any);
 
             expect(addWarning.default).toBeCalledTimes(1);
         })

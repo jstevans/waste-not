@@ -1,6 +1,6 @@
 import * as babelParser from '@babel/parser';
-import walkFile from 'walker/walkFile';
-import visitors from 'visitors/visitors';
+import walkFile from '../lib/walkFile';
+import visitors from '../../visitors/lib/visitors';
 
 const babelParserOptions: babelParser.ParserOptions = {
     sourceType: 'module',
