@@ -4,6 +4,7 @@
     "target": "esnext",
     "module": "commonjs",
     "rootDir": "./packages",
+    "outDir": "./out",
     "strict": true,
     "noImplicitAny": false,
     "esModuleInterop": true         
