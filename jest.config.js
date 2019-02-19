@@ -13,7 +13,7 @@ const moduleNameMapper = Object.keys(paths || {}).map(key => {
   };
 }).reduce((acc, e) => ({ ...acc,
   ...e
-}));
+}), {});
 
 module.exports = {
   preset: 'ts-jest',

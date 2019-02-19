@@ -8,7 +8,7 @@ module.exports = function (w) {
 
   return {
     files: [
-      'packages/**/src/**/*.ts',
+      'packages/**/lib/**/*.ts',
       {
         pattern: 'packages/**/test/**/*.ts',
         instrument: false
