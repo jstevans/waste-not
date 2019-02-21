@@ -17,7 +17,7 @@ describe("import", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import foo1 from './importDefault';", () => {
@@ -26,7 +26,7 @@ describe("import", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import { default as foo2 } from './importDefaultRename';", () => {
@@ -35,7 +35,7 @@ describe("import", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import { foo, bar } from './importSome';", () => {
@@ -44,7 +44,7 @@ describe("import", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import { default as foo3, bar as bar1 } from './importRenames';", () => {
@@ -53,7 +53,7 @@ describe("import", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import * as foobar from './importAll';", () => {
@@ -62,7 +62,7 @@ describe("import", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 })
 
@@ -73,7 +73,7 @@ describe("dynamicImport", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import('./dynamicImport' + 'plus')", () => {
@@ -82,7 +82,7 @@ describe("dynamicImport", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import('./dynamicImport' + x + 'wildcard')", () => {
@@ -91,7 +91,7 @@ describe("dynamicImport", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.wildcardDependencies).toHaveLength(1);
     })
 })
 
@@ -102,7 +102,7 @@ describe("awaitDynamicImport", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("const async2 = async () => await import('./dynamicImportAwait' + 'plus');", () => {
@@ -111,7 +111,7 @@ describe("awaitDynamicImport", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("const async3 = async () => await import('./dynamicImportAwait' + x + 'wildcard');", () => {
@@ -120,7 +120,7 @@ describe("awaitDynamicImport", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.wildcardDependencies).toHaveLength(1);
     })
 })
 
@@ -131,7 +131,7 @@ describe("dynamicImportThen", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import('./dynamicImportThen' + 'plus').then(() => {});", () => {
@@ -140,7 +140,7 @@ describe("dynamicImportThen", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("import('./dynamicImportThen' + x + 'wildcard').then(() => {});", () => {
@@ -149,7 +149,7 @@ describe("dynamicImportThen", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.wildcardDependencies).toHaveLength(1);
     })
 })
 
@@ -160,7 +160,7 @@ describe("require", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("require('./require' + 'plus')", () => {
@@ -169,7 +169,7 @@ describe("require", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("require('./require' + x + 'wildcard')", () => {
@@ -178,7 +178,7 @@ describe("require", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.wildcardDependencies).toHaveLength(1);
     })
 })
 
@@ -189,7 +189,7 @@ describe("requireResolve", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("require.resolve('requireResolve' + 'plus');", () => {
@@ -198,7 +198,7 @@ describe("requireResolve", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 
     it("require.resolve('requireResolve' + x + 'plus');", () => {
@@ -207,7 +207,7 @@ describe("requireResolve", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.wildcardDependencies).toHaveLength(1);
     })
 })
 
@@ -218,7 +218,7 @@ describe("requireEnsure", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 })
 
@@ -229,7 +229,7 @@ describe("requireContext", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 })
 
@@ -240,6 +240,6 @@ describe("tsImportRequire", () => {
             importLine, babelParserOptions);
         const result = walkFile(file, visitors);
 
-        expect(result.dependencies).toHaveLength(1);
+        expect(result.fileDependencies).toHaveLength(1);
     })
 })

@@ -5,4 +5,4 @@ export type VisitorMap = TypeMapOf<Visitor<any>[]>;
 
 export type PropertyOf<T> = T[keyof T];
 
-export type WalkerState = {dependencies: string[], warnings: string[]};
+export type WalkerState = {fileDependencies: string[], wildcardDependencies: string[], nativeDependencies: string[], warnings: string[]};

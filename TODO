@@ -1,7 +1,7 @@
 - [ ] babel-parse all files
 - [ ] use TSConfig to determine potential 'names' for each file? I think on transpiled JS, this is taken care of for us
 - [ ] Determine external dependencies for each file
-    - [ ] walk AST for a file
+    - [X] walk AST for a file
     - [x] let visitors call in
         - [x] create visitors for the various import/export formats
             - [x] `import 'foo'`
@@ -20,7 +20,7 @@
             - [x] Variable-length module call imports, which take an array of module names as their first param
                 - [x] require.ensure()
                 - [x] require.context(), which also takes whether to include subdirectories as its second param
-    - [ ] Classify dependencies as wildcard, native Node API, or file dependencies
+    - [X] Classify dependencies as wildcard, native Node API, or file dependencies
     - [ ] Using an optional path mapping dictionary (a la TypeScript), convert all wildcard and file dependencies 
 - [ ] Build the dependency graph using the files and their external dependencies
     - [ ] Keep track of cycles of files and files that are leaf nodes
