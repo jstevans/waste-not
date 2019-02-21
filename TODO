@@ -20,11 +20,19 @@
             - [x] Variable-length module call imports, which take an array of module names as their first param
                 - [x] require.ensure()
                 - [x] require.context(), which also takes whether to include subdirectories as its second param
+    - [ ] Classify dependencies as wildcard, native Node API, or file dependencies
+    - [ ] Using an optional path mapping dictionary (a la TypeScript), convert all wildcard and file dependencies 
 - [ ] Build the dependency graph using the files and their external dependencies
     - [ ] Keep track of cycles of files and files that are leaf nodes
     - [ ] Edges should be incident to a file, from the files it depends on
-- [ ] Get each file's transitive hash (aka trash) by walking the dependency graph, starting from each cycle and leaf node
-        - [ ] For each leaf node, hash its path+name+contents
-        - [ ] For each cycle, hash all paths+names+contents together in lexical order
-        - [ ] For each other node, hash its path+name+contents together with its dependencies' hashes in lexical order
-- [ ] Build a list of files and hashes
+    - [ ] Dependencies on a native Node API should be mapped to a special node that contains the node version
+    - [ ] Dependencies with a wildcard should each be mapped to a unique special node that depends on all files that match that wildcard
+- [ ] Get each file's transitive hash (aka trash) by walking the dependency graph
+        - [ ] Starting from each leaf node, compute each node's hash and transitive dependencies:
+                - [ ] Call the node's hash its path+name+contents
+                - [ ] Add the current node and its dependencies to the set of transitiveDependencies of each node that points to the current node
+                - [ ] Add to the list of nodes to visit: each node that points to the current node, but doesn't yet have a hash
+        - [ ] For each node, get the trash:
+                - [ ] Call the node's trash the hash of (the node's hash + the hash of each transitive dependency, sorted lexicographically)
+        
+- [ ] Build a list of files to (trash, hash, transitiveDependencies)
