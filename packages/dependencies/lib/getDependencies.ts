@@ -9,17 +9,19 @@ import { WalkerState } from '../../walker/lib/types';
 import getWildcardPathAliases from "./getWildcardPathAliases";
 import getTsConfig from './getTsConfig';
 
-export default function getDependencies(filePath: string, options?: Options, resolver: Resolver = defaultResolver) {
-    let tsConfig = getTsConfig(options);
+export default function configure(options?: Options, resolver: Resolver = defaultResolver) {
+    return function getDependencies(filePath: string) {
+        let tsConfig = getTsConfig(options);
 
-    const code = readFileSync(filePath, 'utf8');
+        const code = readFileSync(filePath, 'utf8');
 
-    const ast = parse(code, babelParserOptions);
-    const { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors) as WalkerState;
-    return {
-        fileDependencies: fileDependencies.map(dep => resolver(ast, dep, filePath, options)),
-        wildcardDependencies: wildcardDependencies.map(dep => getWildcardPathAliases(dep, tsConfig)),
-        nativeDependencies,
-        warnings
+        const ast = parse(code, babelParserOptions);
+        const { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors) as WalkerState;
+        return {
+            fileDependencies: fileDependencies.map(dep => resolver(ast, dep, filePath, options)),
+            wildcardDependencies: wildcardDependencies.map(dep => getWildcardPathAliases(dep, tsConfig)),
+            nativeDependencies,
+            warnings
+        }
     }
 }
