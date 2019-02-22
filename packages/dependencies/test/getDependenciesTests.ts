@@ -150,7 +150,7 @@ describe("getDependencies", () => {
             getDependencies(testOptions)(testFilePath);
             expect(calls[6]).toEqual({
                 fnName: "getWildcardPathAliases",
-                args: [mockWalkFileState.wildcardDependencies[0], mockTsConfig]
+                args: [mockWalkFileState.wildcardDependencies[0], testFilePath, mockTsConfig]
             });
         })
     })
@@ -158,6 +158,7 @@ describe("getDependencies", () => {
     it("6) returns the alias-mapped results of walkFile", () => {
         let results = getDependencies(testOptions)(testFilePath);
         expect(results).toEqual({
+            filePath: testFilePath,
             fileDependencies: [mockResolvedAlias, mockResolvedAlias],
             wildcardDependencies: [mockResolvedWildcardAlias],
             nativeDependencies: mockWalkFileState.nativeDependencies,

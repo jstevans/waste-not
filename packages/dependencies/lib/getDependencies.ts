@@ -18,8 +18,9 @@ export default function configure(options?: Options, resolver: Resolver = defaul
         const ast = parse(code, babelParserOptions);
         const { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors) as WalkerState;
         return {
+            filePath,
             fileDependencies: fileDependencies.map(dep => resolver(ast, dep, filePath, options)),
-            wildcardDependencies: wildcardDependencies.map(dep => getWildcardPathAliases(dep, tsConfig)),
+            wildcardDependencies: wildcardDependencies.map(dep => getWildcardPathAliases(dep, filePath, tsConfig)),
             nativeDependencies,
             warnings
         }
