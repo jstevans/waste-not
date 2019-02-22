@@ -15,3 +15,11 @@ export type PathAliasInfo = {
     original: string,
     aliases: string[],
 };
+
+export type DependencyGetter = (filePath: string) => Dependencies;
+export type Dependencies = {
+    fileDependencies: string[]
+    wildcardDependencies: PathAliasInfo[],
+    nativeDependencies: string[],
+    warnings: string[]
+}
