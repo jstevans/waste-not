@@ -12,11 +12,11 @@ export type TsConfig = { baseUrl: string, paths: { [idx: string]: string[] } };
 export type Resolver = (ast: File, dependency: string, filePath: string, options?: Options) => string;
 
 export type PathAliasInfo = {
-    original: string,
+    original: string[],
     aliases: string[],
 };
 
-export type DependencyGetter = (code: string) => Dependencies;
+export type DependencyGetter = (filePath: string) => Dependencies;
 export type Dependencies = {
     filePath: string,
     fileDependencies: string[]

@@ -23,7 +23,7 @@
     - [X] Classify dependencies as wildcard, native Node API, or file dependencies
     - [X] Using an optional path mapping dictionary (a la TypeScript), convert all wildcard and file dependencies 
 - [ ] Build the dependency graph using the files and their external dependencies
-    - [ ] Keep track of cycles of files and files that are leaf nodes
+    - [ ] Keep track of files that are leaf nodes
     - [ ] Edges should be incident to a file, from the files it depends on
     - [ ] Dependencies on a native Node API should be mapped to a special node that contains the node version
     - [ ] Dependencies with a wildcard should each be mapped to a unique special node that depends on all files that match that wildcard

@@ -9,7 +9,7 @@ import { WalkerState } from '../../walker/lib/types';
 import getWildcardPathAliases from "./getWildcardPathAliases";
 import getTsConfig from './getTsConfig';
 
-export default function configure(options?: Options, resolver: Resolver = defaultResolver): DependencyGetter {
+export default function configure(allFiles: string[], options?: Options, resolver: Resolver = defaultResolver): DependencyGetter {
     return function getDependencies(filePath: string): Dependencies {
         let tsConfig = getTsConfig(options);
 

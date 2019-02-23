@@ -1,4 +1,5 @@
 import getWildcardPathAliases from "../lib/getWildcardPathAliases";
+import * as path from 'path';
 
 describe("getWildcardPathAliases", () => {
     let testConfig = {
@@ -17,7 +18,7 @@ describe("getWildcardPathAliases", () => {
         let result = getWildcardPathAliases(testValue, "", testConfig);
 
         expect(result).toEqual({
-            original: testValue,
+            original: [testValue],
             aliases: ["test-bar", "test2bar"]
         })
     })
@@ -27,7 +28,7 @@ describe("getWildcardPathAliases", () => {
         let result = getWildcardPathAliases(testValue, "", testConfig);
 
         expect(result).toEqual({
-            original: testValue,
+            original: [testValue],
             aliases: []
         })
     })
@@ -37,7 +38,7 @@ describe("getWildcardPathAliases", () => {
         let result = getWildcardPathAliases(testValue, "", testConfig);
 
         expect(result).toEqual({
-            original: testValue,
+            original: [testValue],
             aliases: ["test5-ar", "test6ar"]
         })
     })
@@ -47,7 +48,7 @@ describe("getWildcardPathAliases", () => {
         let result = getWildcardPathAliases(testValue, "", testConfig);
 
         expect(result).toEqual({
-            original: testValue,
+            original: [testValue],
             aliases: ["bar"]
         })
     })
@@ -57,7 +58,7 @@ describe("getWildcardPathAliases", () => {
         let result = getWildcardPathAliases(testValue, "", testConfig);
 
         expect(result).toEqual({
-            original: testValue,
+            original: [testValue],
             aliases: ["barfaz"]
         })
     })
@@ -67,8 +68,41 @@ describe("getWildcardPathAliases", () => {
         let result = getWildcardPathAliases(testValue, "/foo/fah.ts", testConfig);
 
         expect(result).toEqual({
-            original: "/foo/barfaz*",
+            original: ["/foo/barfaz*"],
             aliases: []
         });
+    })
+
+    it("converts aliases to paths correctly", () => {
+        let testValue = "foo*";
+        let result = getWildcardPathAliases(testValue, "./src/foo/bar.ts", testConfig);
+        let expected = {
+            "aliases": [
+                "test-*",
+                "test2*",
+                path.resolve("./src/foo/node_modules/test-*"),
+                path.resolve("./src/foo/node_modules/@types/test-*"),
+                path.resolve("./src/node_modules/test-*"),
+                path.resolve("./src/node_modules/@types/test-*"),
+                path.resolve("./node_modules/test-*"),
+                path.resolve("./node_modules/@types/test-*"),
+                path.resolve("./src/foo/node_modules/test2*"),
+                path.resolve("./src/foo/node_modules/@types/test2*"),
+                path.resolve("./src/node_modules/test2*"),
+                path.resolve("./src/node_modules/@types/test2*"),
+                path.resolve("./node_modules/test2*"),
+                path.resolve("./node_modules/@types/test2*"),
+            ],
+            "original": [
+                "foo*",
+                path.resolve("./src/foo/node_modules/foo*"),
+                path.resolve("./src/foo/node_modules/@types/foo*"),
+                path.resolve("./src/node_modules/foo*"),
+                path.resolve("./src/node_modules/@types/foo*"),
+                path.resolve("./node_modules/foo*"),
+                path.resolve("./node_modules/@types/foo*"),
+            ],
+        };
+        expect(result).toEqual(expected);
     })
 });

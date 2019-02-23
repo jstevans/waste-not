@@ -18,4 +18,4 @@ declare module "typescript" {
     function resolvePath(path: string, ...paths: (string | undefined)[]): string;
 }
 
-export {getOwnKeys, matchPatternOrExact, isString, matchedText, patternText, pathIsRelative, combinePaths, resolvePath } from "typescript";
+export {createCompilerHost, resolveModuleName, getOwnKeys, matchPatternOrExact, isString, matchedText, patternText, pathIsRelative, combinePaths, resolvePath } from "typescript";

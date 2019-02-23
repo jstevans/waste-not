@@ -33,6 +33,7 @@ function makeTestUtils(calls: CallInfo[]) {
 
 describe("getDependencies", () => {
     let testFilePath = "./file";
+    let testAllFiles = [];
     let testOptions: Options = {
         directory: "./",
     };
@@ -48,7 +49,7 @@ describe("getDependencies", () => {
     };
     let mockResolvedAlias = "TEST";
     let mockResolvedWildcardAlias: PathAliasInfo = {
-        original: "TEST",
+        original: ["TEST"],
         aliases: []
     };
 
@@ -69,7 +70,7 @@ describe("getDependencies", () => {
     })
 
     it("1) calls getTsConfig", () => {
-        getDependencies(testOptions)(testFilePath);
+        getDependencies(testAllFiles, testOptions)(testFilePath);
         expect(calls[0]).toEqual({
             fnName: "getTsConfig",
             args: [testOptions]
@@ -77,7 +78,7 @@ describe("getDependencies", () => {
     })
 
     it("2) calls readFileSync", () => {
-        getDependencies()(testFilePath);
+        getDependencies(testAllFiles)(testFilePath);
         expect(calls[1]).toEqual({
             fnName: "readFileSync",
             args: [testFilePath, "utf8"]
@@ -85,7 +86,7 @@ describe("getDependencies", () => {
     })
 
     it("3) calls babelParser", () => {
-        getDependencies()(testFilePath);
+        getDependencies(testAllFiles)(testFilePath);
         expect(calls[2]).toEqual({
             fnName: "parse",
             args: ["fileContents", babelParserOptions]
@@ -93,7 +94,7 @@ describe("getDependencies", () => {
     })
 
     it("4) calls walkFile", () => {
-        getDependencies()(testFilePath);
+        getDependencies(testAllFiles)(testFilePath);
         expect(calls[3]).toEqual({
             fnName: "walkFile",
             args: [mockAst, visitors]
@@ -112,14 +113,14 @@ describe("getDependencies", () => {
             mockWalkFileState.wildcardDependencies = tmpWildcardDependencies;
         })
         it("doesn't call callCabinet", () => {
-            getDependencies()(testFilePath);
+            getDependencies(testAllFiles)(testFilePath);
             expect(calls[4]).toBeUndefined();
         })
     })
 
     describe("4b) when there are fileDependencies", () => {
         it("calls callCabinet on each element by default", () => {
-            getDependencies(testOptions)(testFilePath);
+            getDependencies(testAllFiles, testOptions)(testFilePath);
             expect(calls[4]).toEqual({
                 fnName: "callCabinet",
                 args: [mockAst, mockWalkFileState.fileDependencies[0], testFilePath, testOptions]
@@ -132,7 +133,7 @@ describe("getDependencies", () => {
         })
 
         it("calls the passed resolver on each element", () => {
-            getDependencies(testOptions, mockResolver)(testFilePath);
+            getDependencies(testAllFiles, testOptions, mockResolver)(testFilePath);
             expect(calls[4]).toEqual({
                 fnName: "mockResolver",
                 args: [mockAst, mockWalkFileState.fileDependencies[0], testFilePath, testOptions]
@@ -147,7 +148,7 @@ describe("getDependencies", () => {
 
     describe("5) when there are wildcardDependencies", () => {
         it("calls getWildcardPathAliases on each element by default", () => {
-            getDependencies(testOptions)(testFilePath);
+            getDependencies(testAllFiles, testOptions)(testFilePath);
             expect(calls[6]).toEqual({
                 fnName: "getWildcardPathAliases",
                 args: [mockWalkFileState.wildcardDependencies[0], testFilePath, mockTsConfig]
@@ -156,7 +157,7 @@ describe("getDependencies", () => {
     })
 
     it("6) returns the alias-mapped results of walkFile", () => {
-        let results = getDependencies(testOptions)(testFilePath);
+        let results = getDependencies(testAllFiles, testOptions)(testFilePath);
         expect(results).toEqual({
             filePath: testFilePath,
             fileDependencies: [mockResolvedAlias, mockResolvedAlias],
