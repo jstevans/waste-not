@@ -1,9 +1,3 @@
-var path = require('path');
-
-var jestConfig = require('./jest.config');
-
-console.log(JSON.stringify(jestConfig.moduleNameMapper));
-
 module.exports = function (w) {
 
   return {
