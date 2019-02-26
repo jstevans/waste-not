@@ -22,6 +22,7 @@
                 - [x] require.context(), which also takes whether to include subdirectories as its second param
     - [X] Classify dependencies as wildcard, native Node API, or file dependencies
     - [X] Using an optional path mapping dictionary (a la TypeScript), convert all wildcard and file dependencies 
+    - [X] Comparing against the list of all files, convert wildcard dependencies into real dependencies
 - [ ] Build the dependency graph using the files and their external dependencies
     - [ ] Keep track of files that are leaf nodes
     - [ ] Edges should be incident to a file, from the files it depends on

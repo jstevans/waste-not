@@ -1,5 +1,5 @@
-import getWildcardPathAliases from "../lib/getWildcardPathAliases";
 import * as path from 'path';
+import getWildcardPathAliases from '../lib/getWildcardPathAliases';
 
 describe("getWildcardPathAliases", () => {
     let testConfig = {
@@ -78,29 +78,29 @@ describe("getWildcardPathAliases", () => {
         let result = getWildcardPathAliases(testValue, "./src/foo/bar.ts", testConfig);
         let expected = {
             "aliases": [
-                "test-*",
-                "test2*",
-                path.resolve("./src/foo/node_modules/test-*"),
-                path.resolve("./src/foo/node_modules/@types/test-*"),
-                path.resolve("./src/node_modules/test-*"),
-                path.resolve("./src/node_modules/@types/test-*"),
-                path.resolve("./node_modules/test-*"),
-                path.resolve("./node_modules/@types/test-*"),
-                path.resolve("./src/foo/node_modules/test2*"),
-                path.resolve("./src/foo/node_modules/@types/test2*"),
-                path.resolve("./src/node_modules/test2*"),
-                path.resolve("./src/node_modules/@types/test2*"),
-                path.resolve("./node_modules/test2*"),
-                path.resolve("./node_modules/@types/test2*"),
+                "test-",
+                "test2",
+                path.resolve("./src/foo/node_modules/test-"),
+                path.resolve("./src/foo/node_modules/@types/test-"),
+                path.resolve("./src/node_modules/test-"),
+                path.resolve("./src/node_modules/@types/test-"),
+                path.resolve("./node_modules/test-"),
+                path.resolve("./node_modules/@types/test-"),
+                path.resolve("./src/foo/node_modules/test2"),
+                path.resolve("./src/foo/node_modules/@types/test2"),
+                path.resolve("./src/node_modules/test2"),
+                path.resolve("./src/node_modules/@types/test2"),
+                path.resolve("./node_modules/test2"),
+                path.resolve("./node_modules/@types/test2"),
             ],
             "original": [
-                "foo*",
-                path.resolve("./src/foo/node_modules/foo*"),
-                path.resolve("./src/foo/node_modules/@types/foo*"),
-                path.resolve("./src/node_modules/foo*"),
-                path.resolve("./src/node_modules/@types/foo*"),
-                path.resolve("./node_modules/foo*"),
-                path.resolve("./node_modules/@types/foo*"),
+                "foo",
+                path.resolve("./src/foo/node_modules/foo"),
+                path.resolve("./src/foo/node_modules/@types/foo"),
+                path.resolve("./src/node_modules/foo"),
+                path.resolve("./src/node_modules/@types/foo"),
+                path.resolve("./node_modules/foo"),
+                path.resolve("./node_modules/@types/foo"),
             ],
         };
         expect(result).toEqual(expected);

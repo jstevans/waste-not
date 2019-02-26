@@ -10,6 +10,7 @@ import visitors from "../../visitors/lib/visitors";
 import { WalkerState } from "../../walker/lib/types";
 import * as getTsConfig from "../lib/getTsConfig";
 import * as getWildcardPathAliases from "../lib/getWildcardPathAliases";
+import * as getMatchedStrings from "../lib/utilities/getMatchedStrings";
 
 type CallInfo = {
     fnName: string,
@@ -53,6 +54,8 @@ describe("getDependencies", () => {
         aliases: []
     };
 
+    let mockResolvedWildcardPaths: string[] = [];
+
     let mockResolver: typeof callCabinet.default;
 
 
@@ -66,6 +69,7 @@ describe("getDependencies", () => {
         jest.spyOn(walkFile, "default").mockImplementation(makeLoggingMock("walkFile", mockWalkFileState));
         jest.spyOn(callCabinet, "default").mockImplementation(makeLoggingMock("callCabinet", mockResolvedAlias));
         jest.spyOn(getWildcardPathAliases, "default").mockImplementation(makeLoggingMock("getWildcardPathAliases", mockResolvedWildcardAlias));
+        jest.spyOn(getMatchedStrings, "default").mockImplementation(makeLoggingMock("getMatchedStrings", mockResolvedWildcardPaths));
         mockResolver = jest.fn(makeLoggingMock("mockResolver", mockResolvedAlias));
     })
 
@@ -147,11 +151,19 @@ describe("getDependencies", () => {
     })
 
     describe("5) when there are wildcardDependencies", () => {
-        it("calls getWildcardPathAliases on each element by default", () => {
+        it("(a) calls getWildcardPathAliases on each element by default", () => {
             getDependencies(testAllFiles, testOptions)(testFilePath);
             expect(calls[6]).toEqual({
                 fnName: "getWildcardPathAliases",
                 args: [mockWalkFileState.wildcardDependencies[0], testFilePath, mockTsConfig]
+            });
+        })
+        
+        it("(b) calls getWildcardPaths on each element by default", () => {
+            getDependencies(testAllFiles, testOptions)(testFilePath);
+            expect(calls[7]).toEqual({
+                fnName: "getMatchedStrings",
+                args: [testAllFiles, [mockResolvedAlias]]
             });
         })
     })
