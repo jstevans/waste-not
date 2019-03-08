@@ -1,5 +1,4 @@
 import { DependencyGetter, Dependencies } from "../../dependencies/lib/types";
-import * as path from 'path';
 
 export type FileInfo<T> = {[filePath: string]: T }
 export type Graph = {
