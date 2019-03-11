@@ -15,10 +15,10 @@ export default function configure(
     allFiles: string[],
     options?: Options,
     resolver: Resolver = defaultResolver): DependencyGetter {
-    return function getDependencies(filePath: string): Dependencies {
+    return function getDependencies(filePath: string, code?: string): Dependencies {
         let tsConfig = getTsConfig(options);
 
-        const code = readFileSync(filePath, 'utf8');
+        code = code || readFileSync(filePath, 'utf8');
 
         const ast = parse(code, babelParserOptions);
         let { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors) as WalkerState;

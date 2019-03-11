@@ -16,7 +16,7 @@ export type PathAliasInfo = {
     aliases: string[],
 };
 
-export type DependencyGetter = (filePath: string) => Dependencies;
+export type DependencyGetter = (filePath: string, code?: string) => Dependencies;
 export type Dependencies = {
     filePath: string,
     fileDependencies: string[]
