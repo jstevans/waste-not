@@ -38,8 +38,9 @@ export default function configure(
 
         return {
             filePath,
-            fileDependencies: [...fileDependencies, ...wildcardFileDependencies],
-            wildcardDependencies: wildcardAliasDependencies,
+            dependencies: fileDependencies,
+            wildcardFileDependencies,
+            wildcardAliasDependencies,
             nativeDependencies,
             warnings
         }

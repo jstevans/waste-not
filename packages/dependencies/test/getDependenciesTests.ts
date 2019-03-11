@@ -172,8 +172,9 @@ describe("getDependencies", () => {
         let results = getDependencies(testAllFiles, testOptions)(testFilePath);
         expect(results).toEqual({
             filePath: testFilePath,
-            fileDependencies: [mockResolvedAlias, mockResolvedAlias],
-            wildcardDependencies: [mockResolvedWildcardAlias],
+            dependencies: [mockResolvedAlias, mockResolvedAlias],
+            wildcardFileDependencies: [],
+            wildcardAliasDependencies: [mockResolvedWildcardAlias],
             nativeDependencies: mockWalkFileState.nativeDependencies,
             warnings: []
         })
