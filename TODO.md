@@ -29,18 +29,18 @@
     - [ ] Dependencies on a native Node API should be mapped to a special node that contains the node version
     - [ ] Dependencies with a wildcard should each be mapped to a unique special node that depends on all files that match that wildcard
 - [ ] Get each file's transitive hash (aka trash) by walking the dependency graph
-        - [ ] Starting from each leaf node, compute each node's hash and transitive dependencies:
-                - [ ] Perform [Purdom's algorithm] to build the transitive closure of the dependency graph
-                    - [X] Tarjan's algorithm to produce the graph of SCC's
-                    - [X] Toposort the SCCs
-                    - [ ] Compute the transitive closure of the graph of SCC's
-                    - [ ] Reconstruct the transitive closure of the original graph from the graph of SCC's
-                - [ ] Call the node's hash its path+name+contents
-                - [ ] Add the current node and its dependencies to the set of transitiveDependencies of each node that points to the current node
-                - [ ] Add to the list of nodes to visit: each node that points to the current node, but doesn't yet have a hash
-        - [ ] For each node, get the trash:
-                - [ ] Call the node's trash the hash of (the node's hash + the hash of each transitive dependency, sorted lexicographically)
-        
+    - [ ] Starting from each leaf node, compute each node's hash and transitive dependencies:
+        - [ ] Perform [Purdom's algorithm] to build the transitive closure of the dependency graph
+            - [X] Tarjan's algorithm to produce the graph of SCC's
+            - [X] Toposort the SCCs
+            - [ ] Compute the transitive closure of the graph of SCC's
+            - [ ] Reconstruct the transitive closure of the original graph from the graph of SCC's
+        - [ ] Call the node's hash its path+name+contents
+        - [ ] Add the current node and its dependencies to the set of transitiveDependencies of each node that points to the current node
+        - [ ] Add to the list of nodes to visit: each node that points to the current node, but doesn't yet have a hash
+    - [ ] For each node, get the trash:
+        - [ ] Call the node's trash the hash of (the node's hash + the hash of each transitive dependency, sorted lexicographically)
+    
 - [ ] Build a list of files to (trash, hash, transitiveDependencies)
 
 [Purdom's algorithm]:https://algowiki-project.org/en/Purdom's_algorithm#Macro_structure_of_the_algorithm
