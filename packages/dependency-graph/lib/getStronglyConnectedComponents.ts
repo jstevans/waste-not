@@ -2,8 +2,8 @@ export type InputNode = {
     dependencies: string[];
 };
 
-export type InputGraph = {
-    [id: string]: InputNode;
+export type InputGraph<T extends InputNode> = {
+    [id: string]: T;
 };
 
 type NodeExternalData = {
@@ -15,8 +15,8 @@ type NodeInternalData = NodeExternalData & {
     onStack?: boolean;
 };
 
-type SccInputNode = InputNode & NodeInternalData;
-type SccOutputNode = InputNode & Required<NodeInternalData>;
+type SccInputNode<T extends InputNode> = T & NodeInternalData;
+type SccOutputNode<T extends InputNode> = T & Required<NodeInternalData>;
 
 export type StronglyConnectedComponent = {
     nodes: string[];
@@ -27,13 +27,13 @@ export type StronglyConnectedComponents = {
     [sccId: string]: StronglyConnectedComponent;
 };
 
-export type GraphWithComponentMapping = {
-    [id: string]: InputNode & Required<NodeExternalData>;
+export type GraphWithComponentMapping<T extends InputNode> = {
+    [id: string]: T & Required<NodeExternalData>;
 };
 
-export type GraphWithComponents = {
+export type GraphWithComponents<T extends InputNode> = {
     components: StronglyConnectedComponents;
-    graph: GraphWithComponentMapping;
+    graph: GraphWithComponentMapping<T>;
     reverseToposort: string[];
 };
 
@@ -43,7 +43,7 @@ export type GraphWithComponents = {
  * @see https://enwp.org/Tarjan%27s_strongly_connected_components_algorithm
  * @returns A collection of SCCs, as well as the original graph
  */
-export default function getStronglyConnectedComponents(graph: InputGraph): GraphWithComponents {
+export default function getStronglyConnectedComponents<T extends InputNode>(graph: InputGraph<T>): GraphWithComponents<T> {
     let nodeIndex = 0;
     let nodeStack: [string, InputNode][] = [];
     const components: StronglyConnectedComponents = {};
@@ -51,14 +51,14 @@ export default function getStronglyConnectedComponents(graph: InputGraph): Graph
     // One useful property of Tarjan's algorithm is that the order
     // it finds SCCs forms a reverse topological sort of the SCCs
     const reverseToposort: string[] = [];
-    for (let [nodeName, node] of Object.entries(graph) as [string, SccInputNode][]) {
+    for (let [nodeName, node] of Object.entries(graph) as [string, SccInputNode<T>][]) {
         if (node.nodeIndex === undefined) {
             strongConnect(nodeName, node);
         }
     }
 
 
-    function strongConnect(nodeName: string, node: SccInputNode): node is SccOutputNode {
+    function strongConnect<T extends InputNode>(nodeName: string, node: SccInputNode<T>): node is SccOutputNode<T> {
         // Initialize the node with a unique index
         node.nodeIndex = nodeIndex;
         node.componentIndex = nodeIndex;
@@ -68,7 +68,7 @@ export default function getStronglyConnectedComponents(graph: InputGraph): Graph
 
         // Consider successors of node
         for (let dep of node.dependencies) {
-            let depNode = graph[dep] as SccInputNode;
+            let depNode = graph[dep] as unknown as SccInputNode<T>;
             if (depNode.nodeIndex === undefined) {
                 // depNode has not yet been visited; recurse on it.
                 strongConnect(dep, depNode) &&
@@ -87,7 +87,7 @@ export default function getStronglyConnectedComponents(graph: InputGraph): Graph
             // If node is a root node, pop the stack and generate an SCC.
             let component: string[] = [];
             let stackNodeName: string;
-            let stackNode: SccOutputNode;
+            let stackNode: SccOutputNode<T>;
             do {
                 [stackNodeName, stackNode] = nodeStack.pop() as any;
                 stackNode.onStack = false;
@@ -100,16 +100,16 @@ export default function getStronglyConnectedComponents(graph: InputGraph): Graph
         return true;
     }
 
-    return addCrossEdges(components, graph as GraphWithComponentMapping, reverseToposort);
+    return addCrossEdges(components, graph as GraphWithComponentMapping<T>, reverseToposort);
 }
 
-export function addCrossEdges(components: StronglyConnectedComponents, graph: GraphWithComponentMapping, reverseToposort: string[]): GraphWithComponents {
+export function addCrossEdges<T extends InputNode>(components: StronglyConnectedComponents, graph: GraphWithComponentMapping<T>, reverseToposort: string[]): GraphWithComponents<T> {
     for (let [componentId, component] of Object.entries(components)) {
         let componentDeps = component.nodes
             // flatten node dependencies
             .reduce((acc, e) => [...acc, ...graph[e].dependencies], [] as string[])
             // convert to component dependencies
-            .map(dep => (graph[dep] as SccOutputNode).componentIndex.toString())
+            .map(dep => (graph[dep] as SccOutputNode<T>).componentIndex.toString())
             // remove self-dependencies
             .filter(dep => dep != componentId);
 

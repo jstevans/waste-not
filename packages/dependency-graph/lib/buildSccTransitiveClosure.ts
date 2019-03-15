@@ -1,4 +1,4 @@
-import { GraphWithComponents, StronglyConnectedComponent } from "./getStronglyConnectedComponents";
+import { GraphWithComponents, StronglyConnectedComponent, InputNode } from "./getStronglyConnectedComponents";
 
 export type TransitiveClosure = { transitiveClosure?: string[] };
 export type InputComponent = StronglyConnectedComponent & TransitiveClosure;
@@ -7,10 +7,10 @@ export type ComponentsWithTransitiveClosures = {
     [id: string]: ComponentWithTransitiveClosure;
 }
 
-export type GraphAndComponentsWithTransitiveClosure = GraphWithComponents & {
+export type GraphAndComponentsWithTransitiveClosure<T extends InputNode> = GraphWithComponents<T> & {
     components: ComponentsWithTransitiveClosures;
 }
-export default function buildSccTransitiveClosure(graphAndComponents: GraphWithComponents): GraphAndComponentsWithTransitiveClosure {
+export default function buildSccTransitiveClosure<T extends InputNode>(graphAndComponents: GraphWithComponents<T>): GraphAndComponentsWithTransitiveClosure<T> {
     let { graph: _graph, components: inputComponents, reverseToposort } = graphAndComponents;
 
     // a component is always in its own transitive closure
