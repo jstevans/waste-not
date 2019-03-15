@@ -1,15 +1,14 @@
 import { GraphWithComponents, StronglyConnectedComponent } from "./getStronglyConnectedComponents";
 
-export type ExternalData = { transitiveClosure?: string[] };
-export type InternalData = ExternalData;
-export type InputComponent = StronglyConnectedComponent & InternalData;
-export type OutputComponent = StronglyConnectedComponent & Required<ExternalData>;
-export type OutputComponents = {
-    [id: string]: OutputComponent;
+export type TransitiveClosure = { transitiveClosure?: string[] };
+export type InputComponent = StronglyConnectedComponent & TransitiveClosure;
+export type ComponentWithTransitiveClosure = StronglyConnectedComponent & Required<TransitiveClosure>;
+export type ComponentsWithTransitiveClosures = {
+    [id: string]: ComponentWithTransitiveClosure;
 }
 
 export type GraphAndComponentsWithTransitiveClosure = GraphWithComponents & {
-    components: OutputComponents;
+    components: ComponentsWithTransitiveClosures;
 }
 export default function buildSccTransitiveClosure(graphAndComponents: GraphWithComponents): GraphAndComponentsWithTransitiveClosure {
     let { graph: _graph, components: inputComponents, reverseToposort } = graphAndComponents;
@@ -20,7 +19,7 @@ export default function buildSccTransitiveClosure(graphAndComponents: GraphWithC
         component.transitiveClosure = [sortedId];
     }
 
-    let components = inputComponents as OutputComponents;
+    let components = inputComponents as ComponentsWithTransitiveClosures;
 
     // In the order of a reverse toposort, i.e. going over each component
     // only after we've gone over all of its dependencies...
