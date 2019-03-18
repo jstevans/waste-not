@@ -1,0 +1,1 @@
+export { readFileSync, writeFileSync, mkdirSync, existsSync } from 'fs';
