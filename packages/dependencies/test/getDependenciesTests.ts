@@ -101,7 +101,12 @@ describe("getDependencies", () => {
         getDependencies(testAllFiles)(testFilePath);
         expect(calls[3]).toEqual({
             fnName: "walkFile",
-            args: [mockAst, visitors]
+            args: [mockAst, visitors, {
+                fileDependencies: [],
+                wildcardDependencies: [],
+                nativeDependencies: [],
+                warnings: []
+            }]
         })
     })
 

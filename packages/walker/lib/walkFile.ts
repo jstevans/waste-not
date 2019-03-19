@@ -3,7 +3,7 @@ import { File, BaseNode } from '@babel/types';
 import walkNode from './walkNode';
 
 
-export default function walkFile(file: File, visitorMap: VisitorMap) {
+export default function walkFile<T>(file: File, visitorMap: VisitorMap, defaultState?: T): T {
     if (!file.program) {
         throw new Error(`File has no program: ${file.loc}`);
     } else if (!file.program.body) {
@@ -19,7 +19,7 @@ export default function walkFile(file: File, visitorMap: VisitorMap) {
     // the last element is always the next node to visit.
     const nodesToVisit: BaseNode[] = [...body].reverse();
 
-    const state: any = {};
+    const state: any = defaultState || {};
     for (let node = nodesToVisit.pop(); node != undefined; node = nodesToVisit.pop()) {
         const subNodes = walkNode(node, visitorMap, state);
         if (subNodes && subNodes.length > 0) {

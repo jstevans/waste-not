@@ -15,7 +15,7 @@ describe("import", () => {
         const importLine = "import './import';";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -24,7 +24,7 @@ describe("import", () => {
         const importLine = "import foo1 from './importDefault';";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -33,7 +33,7 @@ describe("import", () => {
         const importLine = "import { default as foo2 } from './importDefaultRename';";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -42,7 +42,7 @@ describe("import", () => {
         const importLine = "import { foo, bar } from './importSome';";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -51,7 +51,7 @@ describe("import", () => {
         const importLine = "import { default as foo3, bar as bar1 } from './importRenames';";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -60,7 +60,7 @@ describe("import", () => {
         const importLine = "import * as foobar from './importAll';";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -71,7 +71,7 @@ describe("dynamicImport", () => {
         const importLine = "import('./dynamicImport');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -80,7 +80,7 @@ describe("dynamicImport", () => {
         const importLine = "import('./dynamicImport' + 'plus')";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -89,7 +89,7 @@ describe("dynamicImport", () => {
         const importLine = "import('./dynamicImport' + x + 'wildcard')";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.wildcardDependencies).toHaveLength(1);
     })
@@ -100,7 +100,7 @@ describe("awaitDynamicImport", () => {
         const importLine = "const async1 = async () => await import('./dynamicImportAwait');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -109,7 +109,7 @@ describe("awaitDynamicImport", () => {
         const importLine = "const async2 = async () => await import('./dynamicImportAwait' + 'plus');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -118,7 +118,7 @@ describe("awaitDynamicImport", () => {
         const importLine = "const async3 = async () => await import('./dynamicImportAwait' + x + 'wildcard');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.wildcardDependencies).toHaveLength(1);
     })
@@ -129,7 +129,7 @@ describe("dynamicImportThen", () => {
         const importLine = "import('./dynamicImportThen').then(() => {});";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -138,7 +138,7 @@ describe("dynamicImportThen", () => {
         const importLine = "import('./dynamicImportThen' + 'plus').then(() => {});";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -147,7 +147,7 @@ describe("dynamicImportThen", () => {
         const importLine = "import('./dynamicImportThen' + x + 'wildcard').then(() => {});";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.wildcardDependencies).toHaveLength(1);
     })
@@ -158,7 +158,7 @@ describe("require", () => {
         const importLine = "require('./require');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -167,7 +167,7 @@ describe("require", () => {
         const importLine = "require('./require' + 'plus')";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -176,7 +176,7 @@ describe("require", () => {
         const importLine = "require('./require' + x + 'wildcard')";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.wildcardDependencies).toHaveLength(1);
     })
@@ -187,7 +187,7 @@ describe("requireResolve", () => {
         const importLine = "require.resolve('requireResolve');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -196,7 +196,7 @@ describe("requireResolve", () => {
         const importLine = "require.resolve('requireResolve' + 'plus');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -205,7 +205,7 @@ describe("requireResolve", () => {
         const importLine = "require.resolve('requireResolve' + x + 'plus');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.wildcardDependencies).toHaveLength(1);
     })
@@ -216,7 +216,7 @@ describe("requireEnsure", () => {
         const importLine = "require.ensure(['./requireEnsure'], () => {});";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -227,7 +227,7 @@ describe("requireContext", () => {
         const importLine = "require.context('./requireContext');";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })
@@ -238,7 +238,7 @@ describe("tsImportRequire", () => {
         const importLine = "import foo = require('tsImportRequire')";
         const file = babelParser.parse(
             importLine, babelParserOptions);
-        const result = walkFile(file, visitors);
+        const result = walkFile(file, visitors) as any;
 
         expect(result.fileDependencies).toHaveLength(1);
     })

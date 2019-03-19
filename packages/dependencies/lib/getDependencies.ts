@@ -21,7 +21,9 @@ export default function configure(
         code = code || readFileSync(filePath, 'utf8');
 
         const ast = parse(code, babelParserOptions);
-        let { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors) as WalkerState;
+
+        const walkerState: WalkerState = { fileDependencies: [], wildcardDependencies: [], nativeDependencies: [], warnings: [] };
+        let { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors, walkerState);
 
         fileDependencies = fileDependencies
             .map(dep => resolver(ast, dep, filePath, options))
