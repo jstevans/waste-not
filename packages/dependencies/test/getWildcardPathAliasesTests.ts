@@ -15,7 +15,7 @@ describe("getWildcardPathAliases", () => {
 
     it("converts aliases", () => {
         let testValue = "foobar";
-        let result = getWildcardPathAliases(testValue, "", testConfig);
+        let result = getWildcardPathAliases(testValue, "", "./", testConfig);
 
         expect(result).toEqual({
             original: [testValue],
@@ -25,7 +25,7 @@ describe("getWildcardPathAliases", () => {
 
     it("returns non-aliased paths", () => {
         let testValue = "test";
-        let result = getWildcardPathAliases(testValue, "", testConfig);
+        let result = getWildcardPathAliases(testValue, "", "./", testConfig);
 
         expect(result).toEqual({
             original: [testValue],
@@ -35,7 +35,7 @@ describe("getWildcardPathAliases", () => {
 
     it("matches the most specific pattern, regardless of order", () => {
         let testValue = "fazbar";
-        let result = getWildcardPathAliases(testValue, "", testConfig);
+        let result = getWildcardPathAliases(testValue, "", "./", testConfig);
 
         expect(result).toEqual({
             original: [testValue],
@@ -45,7 +45,7 @@ describe("getWildcardPathAliases", () => {
 
     it("matches no-wildcard paths", () => {
         let testValue = "barfoo";
-        let result = getWildcardPathAliases(testValue, "", testConfig);
+        let result = getWildcardPathAliases(testValue, "", "./", testConfig);
 
         expect(result).toEqual({
             original: [testValue],
@@ -55,7 +55,7 @@ describe("getWildcardPathAliases", () => {
 
     it("matches wildcarded paths with non-wildcard resolution", () => {
         let testValue = "barbar";
-        let result = getWildcardPathAliases(testValue, "", testConfig);
+        let result = getWildcardPathAliases(testValue, "", "./", testConfig);
 
         expect(result).toEqual({
             original: [testValue],
@@ -65,17 +65,17 @@ describe("getWildcardPathAliases", () => {
 
     it("handles wildcarded relative paths", () => {
         let testValue = "./barfaz*";
-        let result = getWildcardPathAliases(testValue, "/foo/fah.ts", testConfig);
+        let result = getWildcardPathAliases(testValue, "./foo/fah.ts", "./", testConfig);
 
         expect(result).toEqual({
-            original: ["/foo/barfaz*"],
+            original: ["foo/barfaz*"],
             aliases: []
         });
     })
 
     it("converts aliases to paths correctly", () => {
         let testValue = "foo*";
-        let result = getWildcardPathAliases(testValue, "./src/foo/bar.ts", testConfig);
+        let result = getWildcardPathAliases(testValue, "./src/foo/bar.ts", "./", testConfig);
         let expected = {
             "aliases": [
                 "test-",

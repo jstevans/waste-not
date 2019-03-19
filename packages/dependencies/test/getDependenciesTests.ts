@@ -160,7 +160,7 @@ describe("getDependencies", () => {
             getDependencies(testAllFiles, testOptions)(testFilePath);
             expect(calls[6]).toEqual({
                 fnName: "getWildcardPathAliases",
-                args: [mockWalkFileState.wildcardDependencies[0], testFilePath, mockTsConfig]
+                args: [mockWalkFileState.wildcardDependencies[0], testFilePath, testOptions.directory, mockTsConfig]
             });
         })
         

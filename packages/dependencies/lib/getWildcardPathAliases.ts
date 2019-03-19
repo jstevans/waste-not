@@ -10,9 +10,9 @@ import convertRelativePath from "./utilities/convertRelativePath";
  * @param filePath The file that contains a reference to 'pathString'
  * @param tsConfig A tsConfig, containing path mappings
  */
-export default function getWildcardPathAliases(pathString: string, filePath: string, tsConfig?: TsConfig): PathAliasInfo {
+export default function getWildcardPathAliases(pathString: string, filePath: string, baseDirectory: string, tsConfig?: TsConfig): PathAliasInfo {
     let isPathRelative = ts.pathIsRelative(pathString);
-    pathString = isPathRelative ? convertRelativePath(pathString, filePath) : pathString;
+    pathString = isPathRelative ? convertRelativePath(pathString, filePath, baseDirectory) : pathString;
 
     let paths: { original: string[], aliases: string[] } = { original: [pathString], aliases: [] };
     let pathMap = tsConfig && tsConfig.paths;

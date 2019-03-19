@@ -27,10 +27,10 @@ export default function configure(
 
         fileDependencies = fileDependencies
             .map(dep => resolver(ast, dep, filePath, options))
-            .map(dep => convertRelativePath(dep, filePath));
+            .map(dep => convertRelativePath(dep, filePath, options.directory));
 
         let wildcardAliasDependencies = wildcardDependencies
-            .map(dep => getWildcardPathAliases(dep, filePath, tsConfig));
+            .map(dep => getWildcardPathAliases(dep, filePath, options.directory, tsConfig));
 
         let wildcardFileDependencies = wildcardAliasDependencies
             .map(wad => getMatchedStrings(allFiles, [...wad.original, ...wad.aliases]))
