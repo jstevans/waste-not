@@ -82,7 +82,7 @@ describe("getDependencies", () => {
     })
 
     it("2) calls readFileSync", () => {
-        getDependencies(testAllFiles)(testFilePath);
+        getDependencies(testAllFiles, testOptions)(testFilePath);
         expect(calls[1]).toEqual({
             fnName: "readFileSync",
             args: [testFilePath, "utf8"]
@@ -90,7 +90,7 @@ describe("getDependencies", () => {
     })
 
     it("3) calls babelParser", () => {
-        getDependencies(testAllFiles)(testFilePath);
+        getDependencies(testAllFiles, testOptions)(testFilePath);
         expect(calls[2]).toEqual({
             fnName: "parse",
             args: ["fileContents", babelParserOptions]
@@ -98,7 +98,7 @@ describe("getDependencies", () => {
     })
 
     it("4) calls walkFile", () => {
-        getDependencies(testAllFiles)(testFilePath);
+        getDependencies(testAllFiles, testOptions)(testFilePath);
         expect(calls[3]).toEqual({
             fnName: "walkFile",
             args: [mockAst, visitors, {
@@ -122,7 +122,7 @@ describe("getDependencies", () => {
             mockWalkFileState.wildcardDependencies = tmpWildcardDependencies;
         })
         it("doesn't call callCabinet", () => {
-            getDependencies(testAllFiles)(testFilePath);
+            getDependencies(testAllFiles, testOptions)(testFilePath);
             expect(calls[4]).toBeUndefined();
         })
     })

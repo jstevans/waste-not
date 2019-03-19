@@ -6,11 +6,11 @@ export default function defaultResolver(
     ast: File, 
     dependency: string, 
     filePath: string, 
-    options?: Options) {
+    options: Options) {
     return cabinet({
         partial: dependency,
         filename: filePath,
-        directory: './',
+        directory: options.directory,
         ast,
         config: options ? options.requireJsConfig : undefined,
         ...options

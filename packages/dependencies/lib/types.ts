@@ -9,7 +9,7 @@ export type Options = {
 
 export type TsConfig = { baseUrl: string, paths: { [idx: string]: string[] } };
 
-export type Resolver = (ast: File, dependency: string, filePath: string, options?: Options) => string;
+export type Resolver = (ast: File, dependency: string, filePath: string, options: Options) => string;
 
 export type PathAliasInfo = {
     original: string[],
