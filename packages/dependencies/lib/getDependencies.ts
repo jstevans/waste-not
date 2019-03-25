@@ -38,13 +38,42 @@ export default function configure(
 
         fileDependencies = [...fileDependencies, ...wildcardFileDependencies];
 
-        return {
+        return buildDependenciesBag(
             filePath,
-            dependencies: fileDependencies,
+            fileDependencies,
             wildcardFileDependencies,
             wildcardAliasDependencies,
             nativeDependencies,
             warnings
-        }
+        );
+    }
+}
+
+function buildDependenciesBagWarningsOnly(
+    filePath: string,
+    warnings: string[]) {
+    return buildDependenciesBag(
+        filePath,
+        [],
+        [],
+        [],
+        [],
+        warnings);
+}
+
+function buildDependenciesBag(
+    filePath: string,
+    dependencies: string[] = [],
+    wildcardFileDependencies: string[] = [],
+    wildcardAliasDependencies: PathAliasInfo[] = [],
+    nativeDependencies: string[] = [],
+    warnings: string[] = []) {
+    return {
+        filePath,
+        dependencies,
+        wildcardFileDependencies,
+        wildcardAliasDependencies,
+        nativeDependencies,
+        warnings
     }
 }
