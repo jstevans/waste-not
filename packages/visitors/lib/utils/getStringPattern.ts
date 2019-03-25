@@ -1,10 +1,10 @@
-import { Expression, SpreadElement, JSXNamespacedName, isStringLiteral, isBinaryExpression } from "@babel/types";
+import { Expression, SpreadElement, JSXNamespacedName, isStringLiteral, isBinaryExpression, ArgumentPlaceholder } from "@babel/types";
 
 const makeUnsupportedExpressionWarning = (callType: string) => `Unsupported expression in ${callType}. \
                 Using wildcard in dependency graph to not miss dependencies. \
                 To achieve best performance, please only use string literals and + concatenation`;
 
-export default function getStringPattern(callType: string, node: Expression | SpreadElement | JSXNamespacedName) {
+export default function getStringPattern(callType: string, node: Expression | SpreadElement | JSXNamespacedName | ArgumentPlaceholder) {
     const UNSUPPORTED_EXPRESSION_WARNING = makeUnsupportedExpressionWarning(callType);
     const parts = [node];
     const stringParts: string[] = [];
