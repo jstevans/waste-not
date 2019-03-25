@@ -1,4 +1,5 @@
 import { File } from "@babel/types";
+import parser from "./wrappers/babelParse";
 
 export type Options = {
     directory: string,
@@ -15,6 +16,10 @@ export type PathAliasInfo = {
     original: string[],
     aliases: string[],
 };
+
+export type Overrides = { parse?: ScriptParser, resolver?: Resolver};
+
+export type ScriptParser = typeof parser;
 
 export type DependencyGetter = (filePath: string, code?: string) => Dependencies;
 export type Dependencies = {

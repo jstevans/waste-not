@@ -1,10 +1,14 @@
-import babelParserOptions from './constants/babelParser';
 import defaultResolver from './callCabinet';
+import defaultParser from './wrappers/babelParse';
 import readFileSync from './wrappers/readFileSync';
 import visitors from '../../visitors/lib/visitors';
 import walkFile from '../../walker/lib/walkFile';
-import { Options, Resolver, DependencyGetter, Dependencies, PathAliasInfo } from './types';
-import { parse } from '@babel/parser';
+import {
+    DependencyGetter,
+    Options,
+    PathAliasInfo,
+    Overrides
+} from './types';
 import { WalkerState } from '../../walker/lib/types';
 import getWildcardPathAliases from "./getWildcardPathAliases";
 import getTsConfig from './getTsConfig';
@@ -14,13 +18,20 @@ import getMatchedStrings from './utilities/getMatchedStrings';
 export default function configure(
     allFiles: string[],
     options: Options,
-    resolver: Resolver = defaultResolver): DependencyGetter {
+    overrides?: Overrides): DependencyGetter {
     return function getDependencies(filePath: string, code?: string): Dependencies {
         let tsConfig = getTsConfig(options);
 
-        code = code || readFileSync(filePath, 'utf8');
+            code = code || readFileSync(filePath, 'utf8');
 
-        const ast = parse(code, babelParserOptions);
+            const { parse = defaultParser, resolver = defaultResolver } = overrides || {};
+
+            const ast = parse && parse(filePath, code);
+
+            if (!ast) {
+                let warnings = [`Failed to parse file ${filePath}`];
+                return buildDependenciesBagWarningsOnly(filePath, warnings);
+            }
 
         const walkerState: WalkerState = { fileDependencies: [], wildcardDependencies: [], nativeDependencies: [], warnings: [] };
         let { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors, walkerState);

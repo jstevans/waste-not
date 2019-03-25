@@ -1,11 +1,10 @@
 import * as readFileSync from "../lib/wrappers/readFileSync";
-import * as babelParser from "@babel/parser";
+import * as babelParse from "../lib/wrappers/babelParse";
 import { Options, TsConfig, PathAliasInfo } from "../lib/types";
 import { file, program } from "@babel/types";
 import * as walkFile from "../../walker/lib/walkFile";
 import * as callCabinet from "../lib/callCabinet";
 import getDependencies from "../lib/getDependencies";
-import babelParserOptions from "../lib/constants/babelParser";
 import visitors from "../../visitors/lib/visitors";
 import { WalkerState } from "../../walker/lib/types";
 import * as getTsConfig from "../lib/getTsConfig";
@@ -65,7 +64,7 @@ describe("getDependencies", () => {
         let { makeLoggingMock } = makeTestUtils(calls);
         jest.spyOn(getTsConfig, "default").mockImplementation(makeLoggingMock("getTsConfig", mockTsConfig));
         jest.spyOn(readFileSync, "default").mockImplementation(makeLoggingMock("readFileSync", mockFileContents));
-        jest.spyOn(babelParser, "parse").mockImplementation(makeLoggingMock("parse", mockAst));
+        jest.spyOn(babelParse, "default").mockImplementation(makeLoggingMock("parse", mockAst));
         jest.spyOn(walkFile, "default").mockImplementation(makeLoggingMock("walkFile", mockWalkFileState));
         jest.spyOn(callCabinet, "default").mockImplementation(makeLoggingMock("callCabinet", mockResolvedAlias));
         jest.spyOn(getWildcardPathAliases, "default").mockImplementation(makeLoggingMock("getWildcardPathAliases", mockResolvedWildcardAlias));
@@ -93,7 +92,7 @@ describe("getDependencies", () => {
         getDependencies(testAllFiles, testOptions)(testFilePath);
         expect(calls[2]).toEqual({
             fnName: "parse",
-            args: ["fileContents", babelParserOptions]
+            args: [testFilePath, "fileContents"]
         })
     })
 
@@ -142,7 +141,7 @@ describe("getDependencies", () => {
         })
 
         it("calls the passed resolver on each element", () => {
-            getDependencies(testAllFiles, testOptions, mockResolver)(testFilePath);
+            getDependencies(testAllFiles, testOptions, {resolver: mockResolver})(testFilePath);
             expect(calls[4]).toEqual({
                 fnName: "mockResolver",
                 args: [mockAst, mockWalkFileState.fileDependencies[0], testFilePath, testOptions]
