@@ -4,6 +4,16 @@ const babelParserOptions: ParserOptions = {
     plugins: [
         'typescript',
         'dynamicImport',
+        'jsx',
+        'asyncGenerators',
+        'classProperties',
+        'doExpressions',
+        'functionBind',
+        'functionSent',
+        'numericSeparator',
+        'objectRestSpread',
+        'optionalCatchBinding',
+        'optionalChaining'
     ]
 }
 
