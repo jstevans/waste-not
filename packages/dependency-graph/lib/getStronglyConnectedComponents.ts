@@ -91,6 +91,7 @@ export default function getStronglyConnectedComponents<T extends InputNode>(grap
             do {
                 [stackNodeName, stackNode] = nodeStack.pop() as any;
                 stackNode.onStack = false;
+                stackNode.componentIndex = node.componentIndex;
                 component.push(stackNodeName);
             } while (stackNode != node)
 
