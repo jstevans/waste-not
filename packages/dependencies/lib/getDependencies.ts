@@ -5,6 +5,7 @@ import visitors from '../../visitors/lib/visitors';
 import walkFile from '../../walker/lib/walkFile';
 import {
     DependencyGetter,
+    MaybeDependencies,
     Options,
     PathAliasInfo,
     Overrides
@@ -15,12 +16,15 @@ import getTsConfig from './getTsConfig';
 import convertRelativePath from './utilities/convertRelativePath';
 import getMatchedStrings from './utilities/getMatchedStrings';
 
+import * as util from 'util';
+
 export default function configure(
     allFiles: string[],
     options: Options,
     overrides?: Overrides): DependencyGetter {
-    return function getDependencies(filePath: string, code?: string): Dependencies {
-        let tsConfig = getTsConfig(options);
+    return function getDependencies(filePath: string, code?: string): MaybeDependencies {
+        try {
+            let tsConfig = getTsConfig(options);
 
             code = code || readFileSync(filePath, 'utf8');
 
@@ -33,30 +37,50 @@ export default function configure(
                 return buildDependenciesBagWarningsOnly(filePath, warnings);
             }
 
-        const walkerState: WalkerState = { fileDependencies: [], wildcardDependencies: [], nativeDependencies: [], warnings: [] };
-        let { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors, walkerState);
+            const walkerState: WalkerState = { fileDependencies: [], wildcardDependencies: [], nativeDependencies: [], warnings: [] };
+            let { fileDependencies, wildcardDependencies, nativeDependencies, warnings } = walkFile(ast, visitors, walkerState);
 
-        fileDependencies = fileDependencies
-            .map(dep => resolver(ast, dep, filePath, options))
-            .map(dep => convertRelativePath(dep, filePath, options.directory));
+            let fileDependenciesWithFailures = fileDependencies
+                .map(dep => [dep, resolver(ast, dep, filePath, options)])
+                .map(dep => [dep[0], convertRelativePath(dep[1], filePath, options.directory)]);
 
-        let wildcardAliasDependencies = wildcardDependencies
-            .map(dep => getWildcardPathAliases(dep, filePath, options.directory, tsConfig));
+            let fileDepFailures = fileDependenciesWithFailures
+                .filter(dep => !dep[1] || dep[1].length == 0)
+                .map(dep => `Failed to resolve dependency '${dep[0]}' in file '${filePath}'`);
 
-        let wildcardFileDependencies = wildcardAliasDependencies
-            .map(wad => getMatchedStrings(allFiles, [...wad.original, ...wad.aliases]))
-            .reduce((acc, e) => [...acc, ...e], []);
+            warnings.push(...fileDepFailures);
 
-        fileDependencies = [...fileDependencies, ...wildcardFileDependencies];
+            fileDependencies = fileDependenciesWithFailures
+                .filter(dep => dep[1] && dep[1].length > 0)
+                .map(dep => dep[1]);
 
-        return buildDependenciesBag(
-            filePath,
-            fileDependencies,
-            wildcardFileDependencies,
-            wildcardAliasDependencies,
-            nativeDependencies,
-            warnings
-        );
+            let wildcardAliasDependencies = wildcardDependencies
+                .map(dep => getWildcardPathAliases(dep, filePath, options.directory, tsConfig));
+
+            let wildcardFileDependencies = wildcardAliasDependencies
+                .map(wad => getMatchedStrings(allFiles, [...wad.original, ...wad.aliases]))
+                .reduce((acc, e) => [...acc, ...e], []);
+
+            fileDependencies = [...fileDependencies, ...wildcardFileDependencies];
+
+            return buildDependenciesBag(
+                filePath,
+                fileDependencies,
+                wildcardFileDependencies,
+                wildcardAliasDependencies,
+                nativeDependencies,
+                warnings
+            );
+        } catch (e) {
+            return {
+                ...(buildDependenciesBag(filePath)),
+                details: e,
+                issue:
+                    typeof e === 'string' ? new Error(e)
+                        : util.types.isNativeError(e) ? e
+                            : new Error('Unknown issue occurred.')
+            }
+        }
     }
 }
 

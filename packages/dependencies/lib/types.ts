@@ -21,7 +21,7 @@ export type Overrides = { parse?: ScriptParser, resolver?: Resolver};
 
 export type ScriptParser = typeof parser;
 
-export type DependencyGetter = (filePath: string, code?: string) => Dependencies;
+export type DependencyGetter = (filePath: string, code?: string) => MaybeDependencies;
 export type Dependencies = {
     filePath: string,
     dependencies: string[],
@@ -30,3 +30,11 @@ export type Dependencies = {
     nativeDependencies: string[],
     warnings: string[]
 }
+
+export type NotDependencies = Dependencies & {
+    filePath: string,
+    issue: Error,
+    details: any
+}
+
+export type MaybeDependencies = Dependencies | NotDependencies;
