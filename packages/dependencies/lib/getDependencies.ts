@@ -42,7 +42,7 @@ export default function configure(
 
             let fileDependenciesWithFailures = fileDependencies
                 .map(dep => [dep, resolver(ast, dep, filePath, options)])
-                .map(dep => [dep[0], convertRelativePath(dep[1], filePath, options.directory)]);
+                .map(dep => [dep[0], convertRelativePath(dep[1], filePath, options.baseDirectory)]);
 
             let fileDepFailures = fileDependenciesWithFailures
                 .filter(dep => !dep[1] || dep[1].length == 0)
@@ -55,7 +55,7 @@ export default function configure(
                 .map(dep => dep[1]);
 
             let wildcardAliasDependencies = wildcardDependencies
-                .map(dep => getWildcardPathAliases(dep, filePath, options.directory, tsConfig));
+                .map(dep => getWildcardPathAliases(dep, filePath, options.baseDirectory, tsConfig));
 
             let wildcardFileDependencies = wildcardAliasDependencies
                 .map(wad => getMatchedStrings(allFiles, [...wad.original, ...wad.aliases]))

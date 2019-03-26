@@ -11,7 +11,7 @@ describe('callCabinet', () => {
     let calls: any[][];
 
     let mockOptions = {
-        directory: "./"
+        baseDirectory: "./"
     }
 
     beforeEach(() => {

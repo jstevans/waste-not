@@ -10,7 +10,7 @@ export default function defaultResolver(
     return cabinet({
         partial: dependency,
         filename: filePath,
-        directory: options.directory,
+        directory: options.baseDirectory,
         ast,
         config: options ? options.requireJsConfig : undefined,
         ...options

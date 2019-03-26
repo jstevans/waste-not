@@ -5,8 +5,8 @@ import configureProcessFile, { ProcessedFileInfo } from './processFile';
 import getStronglyConnectedComponents from '../../dependency-graph/lib/getStronglyConnectedComponents';
 import { DependencyGetter, Options } from '../../dependencies/lib/types';
 
-export default async function processFiles(filePaths: string[], hashAlgorithm: string, options?: Options) {
-    const getDependencies = configureGetDependencies(filePaths, options || { directory: './' });
+export default async function processFiles(filePaths: string[], hashAlgorithm: string, options: Options) {
+    const getDependencies = configureGetDependencies(filePaths, options);
     const fileGraph = await computeFileInfo(filePaths, hashAlgorithm, getDependencies);
     const withStronglyConnectedComponents = getStronglyConnectedComponents(fileGraph);
     const sccTransitiveClosure = buildSccTransitiveClosure(withStronglyConnectedComponents);

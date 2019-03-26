@@ -2,7 +2,7 @@ import { File } from "@babel/types";
 import parser from "./wrappers/babelParse";
 
 export type Options = {
-    directory: string,
+    baseDirectory: string,
     requireJsConfig?: string,
     webpackConfig?: string,
     tsConfig?: string | TsConfig,

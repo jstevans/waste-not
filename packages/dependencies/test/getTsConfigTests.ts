@@ -2,7 +2,7 @@ import getTsConfig from "../lib/getTsConfig";
 
 describe("getTsConfig", () => {
     it("returns undefined when passed undefined", () => {
-        let result = getTsConfig({directory: "/"});
+        let result = getTsConfig({baseDirectory: "/"});
         expect(result).toBeUndefined();
     })
 
@@ -15,7 +15,7 @@ describe("getTsConfig", () => {
 
     it("fetches and returns config.tsConfig when it's a path string", () => {
         let tsConfig = "TS_CONFIG_FILE";
-        let options = {directory: "/", tsConfig};
+        let options = {baseDirectory: "/", tsConfig};
 
         let mockTsConfig = {};
         jest.mock("/TS_CONFIG_FILE", () => mockTsConfig, { virtual: true });

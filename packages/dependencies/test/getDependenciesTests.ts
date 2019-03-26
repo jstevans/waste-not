@@ -35,7 +35,7 @@ describe("getDependencies", () => {
     let testFilePath = "./file";
     let testAllFiles = [];
     let testOptions: Options = {
-        directory: "./",
+        baseDirectory: "./",
     };
 
     let mockTsConfig: TsConfig = {baseUrl: ".", paths: {}};
@@ -159,7 +159,7 @@ describe("getDependencies", () => {
             getDependencies(testAllFiles, testOptions)(testFilePath);
             expect(calls[6]).toEqual({
                 fnName: "getWildcardPathAliases",
-                args: [mockWalkFileState.wildcardDependencies[0], testFilePath, testOptions.directory, mockTsConfig]
+                args: [mockWalkFileState.wildcardDependencies[0], testFilePath, testOptions.baseDirectory, mockTsConfig]
             });
         })
         
