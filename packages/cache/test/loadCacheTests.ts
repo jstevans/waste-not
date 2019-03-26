@@ -25,7 +25,7 @@ describe("loadCache", () => {
     const mockCacheFilePath = 'cacheFilePath';
     ensureCacheFileExistsSpy.mockImplementation(function (...args) {
         calls.push({ type: 'ensureCacheFileExists', args });
-        return mockCacheFilePath;
+        return { fileWasCreated: true, cacheFilePath: mockCacheFilePath };
     });
 
     const mockCacheFileContents = 'cacheFileContents';
@@ -47,22 +47,28 @@ describe("loadCache", () => {
     });
 
     const mockMetadataValue = {};
-    const mockMetadata = {get: jest.fn(() => mockMetadataValue), commit: jest.fn()}
+    const mockMetadata = { get: jest.fn(() => mockMetadataValue), commit: jest.fn() }
     getMetadataSpy.mockImplementation(function (...args) {
         calls.push({ type: 'getMetadata', args });
         return mockMetadata;
     });
 
     const mockContext = {
-        rootPath: 'rootPath',
-        cacheDirPath: 'cacheDirPath',
+        cacheOptions: {
+            rootPath: 'rootPath',
+            cacheDirPath: 'cacheDirPath',
+            mode: {
+                read: true,
+                write: true,
+                overwrite: true,
+            }
+        },
         isPropertyDirty: jest.fn(),
         setPropertyClean: jest.fn()
     }
 
     const mockFileRelativePath = 'fileRelativePath';
-    const mockCacheOptions = {};
-    const result = configureLoadCache(mockContext)(mockFileRelativePath, mockCacheOptions);
+    const result = configureLoadCache(mockContext)(mockFileRelativePath);
 
     describe("1) calls ensureCacheFileExists", () => {
         it("in the right order", () => {
@@ -70,7 +76,7 @@ describe("loadCache", () => {
         })
         it("with the correct params", () => {
             expect(calls[0].args).toEqual([
-                mockContext.cacheDirPath,
+                mockContext.cacheOptions.cacheDirPath,
                 mockFileRelativePath
             ])
         })
@@ -87,7 +93,7 @@ describe("loadCache", () => {
             ])
         })
     })
-    
+
     describe("3) calls json.parse", () => {
         it("in the right order", () => {
             expect(calls[2].type).toBe('jsonParse');

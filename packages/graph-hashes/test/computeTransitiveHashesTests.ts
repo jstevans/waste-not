@@ -52,11 +52,18 @@ describe("computeTransitiveHashes", () => {
         }
     });
 
+    const mockGetCacheFile = jest.fn().mockReturnValue({ 
+        metadata: { 
+            get: jest.fn().mockReturnValue({}), 
+            commit: jest.fn() 
+        } 
+    });
+
     describe("calls getNodesInComponentTransitiveClosure", () => {
         let getNodesInComponentTransitiveClosureSpy = jest.spyOn(getNodesInComponentTransitiveClosure, 'default');
 
         it("once for each component", () => {
-            computeTransitiveHashes(mockGraphAndComponents, 'sha512');
+            computeTransitiveHashes(mockGraphAndComponents, 'sha512', mockGetCacheFile);
             expect(getNodesInComponentTransitiveClosure.default).toBeCalledTimes(4);
         })
 
@@ -69,7 +76,7 @@ describe("computeTransitiveHashes", () => {
         let getHashesFromNodesSpy = jest.spyOn(getHashesFromNodes, 'default');
 
         it("once for each component", () => {
-            computeTransitiveHashes(mockGraphAndComponents, 'sha512');
+            computeTransitiveHashes(mockGraphAndComponents, 'sha512', mockGetCacheFile);
             expect(getHashesFromNodes.default).toBeCalledTimes(4);
         })
 
@@ -82,10 +89,10 @@ describe("computeTransitiveHashes", () => {
                 expectedValues.push(component.nodes);
                 return component.nodes;
             });
-            
-            computeTransitiveHashes(mockGraphAndComponents, 'sha512');
 
-            for(let i in expectedValues) {
+            computeTransitiveHashes(mockGraphAndComponents, 'sha512', mockGetCacheFile);
+
+            for (let i in expectedValues) {
                 expect(getHashesFromNodesSpy.mock.calls[i]).toEqual([expectedValues[i], mockGraphAndComponents.graph]);
             }
 
@@ -99,19 +106,19 @@ describe("computeTransitiveHashes", () => {
 
     describe("calls makeHash", () => {
         it("with the passed hashAlgorithm", () => {
-            computeTransitiveHashes(mockGraphAndComponents, 'hashAlgorithm');
+            computeTransitiveHashes(mockGraphAndComponents, 'hashAlgorithm', mockGetCacheFile);
             for (let [hashAlgorithm] of makeHashSpy.mock.calls) {
                 expect(hashAlgorithm).toEqual('hashAlgorithm');
             }
         })
 
         it("once for each component", () => {
-            computeTransitiveHashes(mockGraphAndComponents, 'sha512');
+            computeTransitiveHashes(mockGraphAndComponents, 'sha512', mockGetCacheFile);
             expect(makeHash.default).toBeCalledTimes(4);
         })
 
         it("with each component's transitive closure as its contents", () => {
-            computeTransitiveHashes(mockGraphAndComponents, 'sha512');
+            computeTransitiveHashes(mockGraphAndComponents, 'sha512', mockGetCacheFile);
             for (let i = 0; i < makeHashSpy.mock.calls.length; i++) {
                 const [, hashData] = makeHashSpy.mock.calls[i];
 
@@ -124,7 +131,7 @@ describe("computeTransitiveHashes", () => {
         })
 
         it("with the data in lexical order", () => {
-            computeTransitiveHashes(mockGraphAndComponents, 'sha512');
+            computeTransitiveHashes(mockGraphAndComponents, 'sha512', mockGetCacheFile);
             for (let [, hashData] of makeHashSpy.mock.calls) {
                 let expectedHashData = JSON.parse(JSON.stringify(hashData)).sort();
                 expect(hashData).toEqual(expectedHashData);

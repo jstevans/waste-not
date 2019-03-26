@@ -61,7 +61,8 @@ describe("ensureCacheFileExists", () => {
         expect(call).toThrow();
     });
 
-    it("returns the resolved path", () => { 
-        expect(result).toBe(mockResolvedPath);
+    it("returns the resolved path and whether the file was created", () => { 
+        expect(result.cacheFilePath).toBe(mockResolvedPath);
+        expect(result.fileWasCreated).toBeTruthy();
     });
 })

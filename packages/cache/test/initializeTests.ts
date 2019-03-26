@@ -1,6 +1,7 @@
 import * as ensureDirectoryExists from '../lib/utilities/ensureDirectoryExists';
 import * as loadCache from '../lib/loadCache';
 import initialize from '../lib/index';
+import { CacheOptions } from '../lib/types';
 describe('initialize', () => {
     const ensureDirectoryExistsSpy = jest.spyOn(ensureDirectoryExists, 'default');
     const loadCacheSpy = jest.spyOn(loadCache, 'default');
@@ -25,7 +26,17 @@ describe('initialize', () => {
         return mockReturn as any;
     });
 
-    const result = initialize(mockRootPath, mockCacheDir, mockIsPropertyDirty, mocksetPropertyClean);
+    const mockCacheOptions: CacheOptions = {
+        rootPath: mockRootPath,
+        cacheDirPath: mockCacheDir,
+        mode: {
+            read: true,
+            write: true,
+            overwrite: true
+        }
+    };
+
+    const result = initialize(mockCacheOptions, mockIsPropertyDirty, mocksetPropertyClean);
 
     describe('1) calls ensureDirectoryExists', () => {
         it('first', () => {
@@ -48,8 +59,7 @@ describe('initialize', () => {
             expect(calls[1].args).toEqual(
                 [
                     {
-                        rootPath: mockRootPath,
-                        cacheDirPath: mockCacheDir,
+                        cacheOptions: mockCacheOptions,
                         isPropertyDirty: mockIsPropertyDirty,
                         setPropertyClean: mocksetPropertyClean
                     }

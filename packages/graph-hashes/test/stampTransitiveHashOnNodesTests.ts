@@ -22,9 +22,17 @@ describe("stampTransitiveHashOnNodes", () => {
             'unreferencedNode': {},
         } as any;
     })
+
+    const mockGetCacheFile = jest.fn().mockReturnValue({ 
+        metadata: { 
+            get: jest.fn().mockReturnValue({}), 
+            commit: jest.fn() 
+        } 
+    });
+
     
     it("stamps the passed component's transitiveHash on all of the component's nodes", () => {
-        stampTransitiveHashOnNodes(mockComponent, mockIncludedIds, mockGraph);
+        stampTransitiveHashOnNodes(mockComponent, mockIncludedIds, mockGraph, mockGetCacheFile);
         mockComponent.nodes.forEach(nodeId => {
             expect(mockGraph[nodeId].transitiveClosure).toEqual(mockIncludedIds);
             expect(mockGraph[nodeId].transitiveHash).toEqual(mockComponent.transitiveHash);
@@ -32,7 +40,7 @@ describe("stampTransitiveHashOnNodes", () => {
     })
 
     it("doesn't touch nodes that aren't part of the passed component", () => {
-        stampTransitiveHashOnNodes(mockComponent, mockIncludedIds, mockGraph);
+        stampTransitiveHashOnNodes(mockComponent, mockIncludedIds, mockGraph, mockGetCacheFile);
         Object.keys(mockGraph).filter(nodeId => mockComponent.nodes.indexOf(nodeId) == -1).forEach(nodeId => {
             expect(mockGraph[nodeId].transitiveHash).toBeFalsy();
             expect(mockGraph[nodeId].transitiveClosure).toBeFalsy();

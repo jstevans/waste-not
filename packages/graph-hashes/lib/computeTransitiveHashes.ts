@@ -4,6 +4,7 @@ import { ComponentWithTransitiveClosure, GraphAndComponentsWithTransitiveClosure
 import { ProcessedFileInfo } from './processFile';
 import getNodesInComponentTransitiveClosure from './utilities/getNodesInComponentTransitiveClosure';
 import getHashesFromNodes from './utilities/getHashesFromNodes';
+import { CacheLoader } from '../../cache/lib/types';
 
 export type TransitiveHash = { transitiveHash?: string };
 export type ComponentWithTransitiveHash = ComponentWithTransitiveClosure & Required<TransitiveHash>;
@@ -21,7 +22,10 @@ export type GraphAndComponentsWithTransitiveHash<T extends ProcessedFileInfo> = 
     graph: GraphWithTransitiveHash<T>;
 }
 
-export default function computeTransitiveHashes<T extends ProcessedFileInfo>(graphWithClosure: GraphAndComponentsWithTransitiveClosure<T>, hashAlgorithm: string) {
+export default function computeTransitiveHashes<T extends ProcessedFileInfo>(
+    graphWithClosure: GraphAndComponentsWithTransitiveClosure<T>, 
+    hashAlgorithm: string,
+    getCacheFile: CacheLoader) {
     const { components: inputComponents, graph: inputGraph } = graphWithClosure;
 
     const components = inputComponents as ComponentsWithTransitiveHash;
@@ -39,7 +43,7 @@ export default function computeTransitiveHashes<T extends ProcessedFileInfo>(gra
         component.transitiveHash = makeHash(hashAlgorithm, includedHashes);
 
         // 3b. Each node's transitive closure (and thus its transitive hash) is the same as its SCC
-        stampTransitiveHashOnNodes(component, includedNodeIds, inputGraph as GraphWithTransitiveHash<T>);
+        stampTransitiveHashOnNodes(component, includedNodeIds, inputGraph as GraphWithTransitiveHash<T>, getCacheFile);
     }
 
     return graphWithClosure as GraphAndComponentsWithTransitiveHash<T>;

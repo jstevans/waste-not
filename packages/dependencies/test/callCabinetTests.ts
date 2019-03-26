@@ -30,6 +30,7 @@ describe('callCabinet', () => {
         expect(calls[0]).toEqual([{
             partial: mockDependency, 
             filename: mockFilePath, 
+            baseDirectory: mockOptions.baseDirectory,
             directory: './', 
             ast: mockFile
         }])

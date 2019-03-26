@@ -1,8 +1,16 @@
 import configureGetProperty from "../lib/getProperty";
+import { PropertyPermissions, Context } from "../lib/types";
 
 const mockContext = {
-    rootPath: 'rootPath',
-    cacheDirPath: 'cacheDirPath',
+    cacheOptions: {
+        rootPath: 'rootPath',
+        cacheDirPath: 'cacheDirPath',
+        mode: {
+            read: true,
+            write: true,
+            overwrite: true
+        }
+    },
     isPropertyDirty: jest.fn(),
     setPropertyClean: jest.fn()
 }
@@ -17,7 +25,12 @@ const mockPropertyOptions = {};
 
 const mockWriteToDisk = jest.fn();
 
-const getProperty = configureGetProperty(mockContext, mockGetMetadata, mockCacheFile, mockFileRelativePath, mockWriteToDisk);
+const mockPermissions: PropertyPermissions = {
+    read: true,
+    write: true,
+}
+
+const getProperty = configureGetProperty(mockContext, mockGetMetadata, mockCacheFile, mockFileRelativePath, mockWriteToDisk, mockPermissions);
 
 beforeEach(() => {
     jest.resetAllMocks();
@@ -45,15 +58,15 @@ describe("getProperty", () => {
         })
 
         it("calls isPropertyDirty on context when called", () => {
-            result.isDirty();
+            if (result.isDirty) result.isDirty();
             expect(mockContext.isPropertyDirty).toHaveBeenCalledTimes(1);
             expect(mockContext.isPropertyDirty).lastCalledWith(
                 mockProperty,
                 mockGetMetadata,
                 {
-                    cacheDirPath: mockContext.cacheDirPath,
+                    cacheDirPath: mockContext.cacheOptions.cacheDirPath,
                     fileRelativePath: mockFileRelativePath,
-                    rootPath: mockContext.rootPath
+                    rootPath: mockContext.cacheOptions.rootPath
                 },
                 mockPropertyOptions);
         })
@@ -65,7 +78,7 @@ describe("getProperty", () => {
         })
 
         it("returns a copy cacheProperty.value on context when called", () => {
-            const resultPropertyValue = result.read();
+            const resultPropertyValue = result.read && result.read();
             expect(resultPropertyValue).toEqual(mockProperty.value);
             expect(resultPropertyValue).not.toBe(mockProperty.value);
         })
@@ -79,21 +92,21 @@ describe("getProperty", () => {
         describe("when called", () => {
             it("sets cacheProperty.value to a copy of the new value", () => {
                 const mockWriteValue = { key1: 'writeValue' };
-                result.write(mockWriteValue);
+                result.write && result.write(mockWriteValue);
                 expect(mockProperty.value).toEqual(mockWriteValue);
                 expect(mockProperty.value).not.toBe(mockWriteValue);
             })
 
             it("calls setPropertyClean with the correct params", () => {
                 const mockWriteValue = { key1: 'writeValue' };
-                result.write(mockWriteValue);
+                result.write && result.write(mockWriteValue);
                 expect(mockContext.setPropertyClean).toHaveBeenCalledWith(
                     mockProperty,
                     mockGetMetadata,
                     {
-                        cacheDirPath: mockContext.cacheDirPath,
+                        cacheDirPath: mockContext.cacheOptions.cacheDirPath,
                         fileRelativePath: mockFileRelativePath,
-                        rootPath: mockContext.rootPath
+                        rootPath: mockContext.cacheOptions.rootPath
                     },
                     mockPropertyOptions
                 )
@@ -101,7 +114,7 @@ describe("getProperty", () => {
 
             it("calls writeToDisk", () => {
                 const mockWriteValue = { key1: 'writeValue' };
-                result.write(mockWriteValue);
+                result.write && result.write(mockWriteValue);
                 expect(mockWriteToDisk).toHaveBeenCalled();
             })
         })
