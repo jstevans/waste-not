@@ -3,7 +3,7 @@ import { PropertyPermissions, Context } from "../lib/types";
 
 const mockContext = {
     cacheOptions: {
-        rootPath: 'rootPath',
+        baseDirectory: 'baseDirectory',
         cacheDirPath: 'cacheDirPath',
         mode: {
             read: true,
@@ -66,7 +66,7 @@ describe("getProperty", () => {
                 {
                     cacheDirPath: mockContext.cacheOptions.cacheDirPath,
                     fileRelativePath: mockFileRelativePath,
-                    rootPath: mockContext.cacheOptions.rootPath
+                    baseDirectory: mockContext.cacheOptions.baseDirectory
                 },
                 mockPropertyOptions);
         })
@@ -106,7 +106,7 @@ describe("getProperty", () => {
                     {
                         cacheDirPath: mockContext.cacheOptions.cacheDirPath,
                         fileRelativePath: mockFileRelativePath,
-                        rootPath: mockContext.cacheOptions.rootPath
+                        baseDirectory: mockContext.cacheOptions.baseDirectory
                     },
                     mockPropertyOptions
                 )

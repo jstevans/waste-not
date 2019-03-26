@@ -19,7 +19,7 @@ export type SetPropertyClean = (
 
 export type FileInfo = {
     cacheDirPath: string,
-    rootPath: string,
+    baseDirectory: string,
     fileRelativePath: string
 }
 
@@ -60,7 +60,7 @@ export type CacheMode = {
 }
 
 export type CacheOptions = {
-    rootPath: string,
+    baseDirectory: string,
     cacheDirPath: string,
     mode: CacheMode,
 }

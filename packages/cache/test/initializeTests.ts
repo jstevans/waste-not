@@ -27,7 +27,7 @@ describe('initialize', () => {
     });
 
     const mockCacheOptions: CacheOptions = {
-        rootPath: mockRootPath,
+        baseDirectory: mockRootPath,
         cacheDirPath: mockCacheDir,
         mode: {
             read: true,

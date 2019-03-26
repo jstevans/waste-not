@@ -17,7 +17,7 @@ export default function configureGetProperty(
         const {
             cacheOptions: {
                 cacheDirPath,
-                rootPath,
+                baseDirectory,
             },
             isPropertyDirty,
             setPropertyClean
@@ -30,7 +30,7 @@ export default function configureGetProperty(
                 getMetadata,
                 {
                     cacheDirPath,
-                    rootPath,
+                    baseDirectory,
                     fileRelativePath
                 },
                 propertyOptions);
@@ -46,7 +46,7 @@ export default function configureGetProperty(
                     getMetadata,
                     {
                         cacheDirPath,
-                        rootPath,
+                        baseDirectory,
                         fileRelativePath
                     },
                     propertyOptions);

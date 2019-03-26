@@ -55,7 +55,7 @@ describe("loadCache", () => {
 
     const mockContext = {
         cacheOptions: {
-            rootPath: 'rootPath',
+            baseDirectory: 'baseDirectory',
             cacheDirPath: 'cacheDirPath',
             mode: {
                 read: true,
