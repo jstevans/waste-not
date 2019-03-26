@@ -12,6 +12,7 @@ export const cacheStructure: CacheFile = {
 export const cacheStructureString = json.stringify(cacheStructure);
 export default function ensureCacheFileExists(cacheDirPath: string, fileRelativePath: string) {
     const cacheFilePath = path.resolve(cacheDirPath, fileRelativePath);
+    let fileWasCreated = true;
     try {
         // Make sure the subdirectories of the cache are hydrated correctly
         ensureDirectoryExists(path.dirname(cacheFilePath));
@@ -23,8 +24,10 @@ export default function ensureCacheFileExists(cacheDirPath: string, fileRelative
         // don't throw on EEXIST
         if (e.errno !== -17) {
             throw e;
+        } else {
+            fileWasCreated = false;
         }
     }
 
-    return cacheFilePath;
+    return { fileWasCreated, cacheFilePath };
 }

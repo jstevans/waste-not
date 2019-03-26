@@ -1,18 +1,17 @@
-import { Initialize, IsPropertyDirty, SetPropertyClean } from "./types";
+import { Initialize, IsPropertyDirty, SetPropertyClean, CacheOptions } from "./types";
 import configureLoadCache from "./loadCache";
 import ensureDirectoryExists from "./utilities/ensureDirectoryExists";
 
 
 const initialize: Initialize =
     function initialize(
-        rootPath: string,
-        cacheDirPath: string,
+        cacheOptions: CacheOptions,
         isPropertyDirty: IsPropertyDirty,
         setPropertyClean: SetPropertyClean) {
 
-        ensureDirectoryExists(cacheDirPath);
+        ensureDirectoryExists(cacheOptions.cacheDirPath);
 
-        return configureLoadCache({ rootPath, cacheDirPath, isPropertyDirty, setPropertyClean });
+        return configureLoadCache({cacheOptions, isPropertyDirty, setPropertyClean });
     };
 
 export default initialize;

@@ -1,27 +1,31 @@
-import { Context, Property, Metadata, PropertyGetter } from "./types";
+import { Context, Property, Metadata, PropertyGetter, PropertyPermissions } from "./types";
 
 export default function configureGetProperty(
     context: Context,
     getMetadata: Metadata,
     cacheFile: any,
     fileRelativePath: string,
-    writeToDisk: () => void
+    writeToDisk: () => void,
+    permissions: PropertyPermissions
 ): PropertyGetter {
     return function getProperty<T>(property: string, propertyOptions?: any): Property<T> {
         if (!cacheFile['properties'][property]) {
             cacheFile['properties'][property] = {};
         }
-        
+
         const cacheProperty = cacheFile['properties'][property];
         const {
-            cacheDirPath,
-            rootPath,
+            cacheOptions: {
+                cacheDirPath,
+                rootPath,
+            },
             isPropertyDirty,
             setPropertyClean
         } = context;
 
-        return {
-            isDirty: () => isPropertyDirty(
+        let propertyValue: Property<T> = {};
+        if (permissions.read) {
+            propertyValue.isDirty = () => isPropertyDirty(
                 cacheProperty,
                 getMetadata,
                 {
@@ -29,9 +33,13 @@ export default function configureGetProperty(
                     rootPath,
                     fileRelativePath
                 },
-                propertyOptions),
-            read: () => JSON.parse(JSON.stringify({ value: cacheProperty.value })).value,
-            write: (newValue: any) => {
+                propertyOptions);
+
+            propertyValue.read = () =>
+                JSON.parse(JSON.stringify({ value: cacheProperty.value })).value;
+        }
+        if (permissions.write) {
+            propertyValue.write = (newValue: any) => {
                 cacheProperty.value = JSON.parse(JSON.stringify({ value: newValue })).value;
                 setPropertyClean(
                     cacheProperty,
@@ -44,7 +52,9 @@ export default function configureGetProperty(
                     propertyOptions);
                 writeToDisk();
             }
-        }
+        };
+
+        return propertyValue;
     }
 }
 

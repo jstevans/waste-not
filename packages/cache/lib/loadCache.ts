@@ -6,16 +6,24 @@ import ensureCacheFileExists from './utilities/ensureCacheFileExists';
 import * as json from './wrappers/json';
 
 export default function configureLoadCache(context: Context): CacheLoader {
-    return function loadCache(fileRelativePath: string, cacheOptions?: any) {
-        const { cacheDirPath } = context;
+    return function loadCache(fileRelativePath: string) {
+        const { cacheOptions: { cacheDirPath, mode: cacheMode } } = context;
 
-        const cacheFilePath = ensureCacheFileExists(cacheDirPath, fileRelativePath);
+        const { fileWasCreated, cacheFilePath } = ensureCacheFileExists(cacheDirPath, fileRelativePath);
 
         const cacheFile = json.parse(readFileSync(cacheFilePath, { encoding: 'utf8' }));
-        const writeToDisk = () => writeFileSync(cacheFilePath, json.stringify(cacheFile));
+        const writeToDisk = () => {
+                writeFileSync(cacheFilePath, json.stringify(cacheFile))
+        };
 
         const metadata = getMetadata(cacheFile, writeToDisk);
-        const getProperty = configureGetProperty(context, metadata, cacheFile, fileRelativePath, writeToDisk);
+
+        let permissions = {
+            write: cacheMode.write && (cacheMode.overwrite || fileWasCreated),
+            read: cacheMode.read
+        };
+        
+        const getProperty = configureGetProperty(context, metadata, cacheFile, fileRelativePath, writeToDisk, permissions);
 
         return { metadata, getProperty };
     }
