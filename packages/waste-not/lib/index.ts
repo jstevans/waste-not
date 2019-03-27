@@ -27,7 +27,7 @@ export interface WasteNotConfig {
 export default async function wastenot(config: WasteNotConfig) {
     let {
         baseDirectory = process.cwd(),
-        cacheDir = '.wastenot',
+        cacheDir = '.waste-not',
         files = ['**/*', '*'],
         hashAlgorithm = 'sha512',
     } = config;
