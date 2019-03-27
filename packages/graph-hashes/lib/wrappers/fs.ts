@@ -1,1 +1,1 @@
-export { readFile } from 'fs';
+export { readFileSync } from 'fs';
