@@ -1,15 +1,43 @@
-const { default: wastenot } = require('waste-not/dist/waste-not/lib/index');
-
+const {
+    default: wastenot
+} = require('./dist/waste-not/lib/index');
+const {
+    performance,
+    PerformanceObserver
+} = require('perf_hooks');
 const config = {
-    files: ['packages/**/*.*', 'node_modules/**/*', '*.js', '*.json', '*.lock'], 
+    files: ['packages/**/*.*', 'node_modules/**/*', '*.json', '*.lock'],
     tsConfig: './tsconfig.json'
 }
 
 console.log("STARTED");
 
-const start = new Date(); 
-wastenot(config).then(a => {
-    const end = new Date(); 
-    console.log('DONE');
-    debugger; 
+const obs = new PerformanceObserver((items) => {
+    const entries = items.getEntriesByType('measure');
+
+    console.log("\nTOP ENTRIES:")
+    const topEntries = entries.filter(e => e.duration > 100);
+    topEntries.forEach(entry => console.log(`${entry.name} - ${entry.duration}`))
+    console.log(`top entries: ${topEntries.map(e => e.duration).reduce((acc,e) => acc+e)}`);
+
+    const nmEntriesTime = entries.filter(e => e.name.includes('node_modules')).reduce((acc, e) => acc + e.duration, 0);
+    console.log(`total processFile{node_modules}: ${nmEntriesTime}`);
+
+    const repoEntriesTime = entries.filter(e => !e.name.includes('node_modules')).reduce((acc, e) => acc + e.duration, 0);
+    console.log(`total processFile{repo}: ${repoEntriesTime}`);
+
+    performance.clearMarks();
+});
+
+obs.observe({
+    'entryTypes': ['measure'],
+    'buffered': true
 })
+const start = performance.now();
+wastenot(config).then(a => {
+    const end = performance.now();
+    console.log(`DONE IN ${end-start}ms`);
+    debugger;
+})
+
+obs.disconnect();
