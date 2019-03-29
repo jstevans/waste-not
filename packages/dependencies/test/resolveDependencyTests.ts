@@ -1,8 +1,8 @@
 import { file, program } from "@babel/types";
-import defaultResolver from "../lib/callCabinet";
+import defaultResolver from "../lib/resolveDependency";
 import * as cabinet from "../lib/wrappers/cabinet";
 
-describe('callCabinet', () => {
+describe('resolveDependency', () => {
     let mockFile = file(program([]), null, null);
     let mockDependency = "dep";
     let mockFilePath = "filePath";

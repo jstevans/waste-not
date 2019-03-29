@@ -2,7 +2,7 @@ import { File } from "@babel/types";
 import { Options } from "./types";
 import cabinet from "./wrappers/cabinet";
 
-export default function defaultResolver(
+export default function resolveDependency(
     ast: File, 
     dependency: string, 
     filePath: string, 
