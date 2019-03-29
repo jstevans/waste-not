@@ -3,12 +3,12 @@ import computeTransitiveHashes from './computeTransitiveHashes';
 import configureGetDependencies from '../../dependencies/lib/getDependencies';
 import configureProcessFile, { ProcessedFileInfo } from './processFile';
 import getStronglyConnectedComponents from '../../dependency-graph/lib/getStronglyConnectedComponents';
-import { DependencyGetter, Options } from '../../dependencies/lib/types';
+import { DependencyGetter, Options, FileOrGroup } from '../../dependencies/lib/types';
 import { CacheLoader, CacheOptions } from '../../cache/lib/types';
 
 export type ProcessFilesOptions = Options & CacheOptions;
 
-export default async function processFiles(filePaths: string[], hashAlgorithm: string, getCacheFile: CacheLoader, options: ProcessFilesOptions) {
+export default async function processFiles(filePaths: Record<string, FileOrGroup>, hashAlgorithm: string, getCacheFile: CacheLoader, options: ProcessFilesOptions) {
     const getDependencies = configureGetDependencies(filePaths, options);
     const fileGraph = await computeFileInfo(filePaths, hashAlgorithm, getDependencies, getCacheFile, options);
     const withStronglyConnectedComponents = getStronglyConnectedComponents(fileGraph);
@@ -19,7 +19,7 @@ export default async function processFiles(filePaths: string[], hashAlgorithm: s
 
 
 export async function computeFileInfo(
-    filePaths: string[], 
+    filePaths: Record<string, FileOrGroup>, 
     hashAlgorithm: string, 
     getDependencies: DependencyGetter,
     getCacheFile: CacheLoader, 
@@ -28,7 +28,7 @@ export async function computeFileInfo(
     const fileHashPromises: {
         [path: string]: Promise<ProcessedFileInfo>
     } = {};
-    for (let path of filePaths) {
+    for (let path in filePaths) {
         fileHashPromises[path] = processFile(path);
     }
 

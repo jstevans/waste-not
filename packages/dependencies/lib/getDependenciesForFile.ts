@@ -8,6 +8,7 @@ import {
     MaybeDependencies,
     Options,
     Overrides,
+    FileOrGroup,
 } from './types';
 import { WalkerState } from '../../walker/lib/types';
 import getWildcardPathAliases from "./getWildcardPathAliases";
@@ -18,7 +19,7 @@ import * as util from 'util';
 import { buildDependenciesBagWarningsOnly, buildDependenciesBag } from './utilities/buildDependenciesBag';
 
 export default function configure(
-    allFiles: string[],
+    allFiles: Record<string, FileOrGroup>,
     options: Options,
     overrides?: Overrides): DependencyGetter<string> {
     return function getDependenciesForFile(filePath: string, code?: string): MaybeDependencies {
@@ -57,7 +58,7 @@ export default function configure(
                 .map(dep => getWildcardPathAliases(dep, filePath, options.baseDirectory, tsConfig));
 
             let wildcardFileDependencies = wildcardAliasDependencies
-                .map(wad => getMatchedStrings(allFiles, [...wad.original, ...wad.aliases]))
+                .map(wad => getMatchedStrings(Object.keys(allFiles), [...wad.original, ...wad.aliases]))
                 .reduce((acc, e) => [...acc, ...e], []);
 
             fileDependencies = [...fileDependencies, ...wildcardFileDependencies];

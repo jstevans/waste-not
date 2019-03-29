@@ -21,7 +21,7 @@ export type Overrides = { parse?: ScriptParser, resolver?: Resolver};
 
 export type ScriptParser = typeof parser;
 
-export type DependencyGetter<T extends string>= (filePath: T, code?: string) => MaybeDependencies;
+export type DependencyGetter<T extends FileOrGroup = string>= (filePath: T, code?: string) => MaybeDependencies;
 export type Dependencies = {
     filePath: string,
     dependencies: string[],
@@ -38,3 +38,6 @@ export type NotDependencies = Dependencies & {
 }
 
 export type MaybeDependencies = Dependencies | NotDependencies;
+
+export type FileOrGroup = string | FileGroup;
+export type FileGroup = { type: 'package', basePath: string, filePaths: string[] };

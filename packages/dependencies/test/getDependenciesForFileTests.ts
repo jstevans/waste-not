@@ -33,7 +33,7 @@ function makeTestUtils(calls: CallInfo[]) {
 
 describe("getDependencies", () => {
     let testFilePath = "./file";
-    let testAllFiles = [];
+    let testAllFiles = {};
     let testOptions: Options = {
         baseDirectory: "./",
     };
@@ -167,7 +167,7 @@ describe("getDependencies", () => {
             getDependencies(testAllFiles, testOptions)(testFilePath);
             expect(calls[7]).toEqual({
                 fnName: "getMatchedStrings",
-                args: [testAllFiles, [mockResolvedAlias]]
+                args: [Object.keys(testAllFiles), [mockResolvedAlias]]
             });
         })
     })
