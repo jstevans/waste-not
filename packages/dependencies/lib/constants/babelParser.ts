@@ -5,6 +5,7 @@ const babelParserOptions: ParserOptions = {
         'typescript',
         'dynamicImport',
         'jsx',
+        ['decorators', { 'decoratorsBeforeExport': true, }],
         'asyncGenerators',
         'classProperties',
         'doExpressions',
