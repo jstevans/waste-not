@@ -6,7 +6,7 @@ import getStronglyConnectedComponents from '../../dependency-graph/lib/getStrong
 import { DependencyGetter, Options } from '../../dependencies/lib/types';
 import { CacheLoader, CacheOptions } from '../../cache/lib/types';
 
-type ProcessFilesOptions = Options & CacheOptions;
+export type ProcessFilesOptions = Options & CacheOptions;
 
 export default async function processFiles(filePaths: string[], hashAlgorithm: string, getCacheFile: CacheLoader, options: ProcessFilesOptions) {
     const getDependencies = configureGetDependencies(filePaths, options);

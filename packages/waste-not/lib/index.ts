@@ -1,8 +1,7 @@
 import * as globby from 'globby';
 import initializeCache from '../../cache/lib/index';
-import processFiles from '../../graph-hashes/lib/processFiles';
+import processFiles, { ProcessFilesOptions } from '../../graph-hashes/lib/processFiles';
 import {
-    CacheOptions,
     FileInfo,
     Metadata,
     PropertyGetter
@@ -44,10 +43,11 @@ export default async function wastenot(config: WasteNotConfig) {
         cacheProperty[hashKey] = metadata.get()[hashKey];
     }
 
-    let cacheOptions: CacheOptions = {
+    let cacheOptions: ProcessFilesOptions = {
+        ...config,
         baseDirectory: baseDirectory,
         cacheDirPath: cacheDir,
-        mode: cacheMode
+        mode: cacheMode,
     };
     let _loadCache = initializeCache(cacheOptions, isPropertyDirty, setPropertyClean);
 
