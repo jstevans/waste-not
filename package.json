@@ -1,6 +1,6 @@
 {
   "name": "waste-not",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A caching system to help tools run incrementally w.r.t. file contents and the dependency graph",
   "main": "dist/waste-not/index.js",
   "types": "dist/waste-not/index.d.ts",
