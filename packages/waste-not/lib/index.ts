@@ -35,7 +35,7 @@ export default async function wastenot(config: WasteNotConfig = {}) {
 
     function isPropertyDirty(cacheProperty: any, metadata: Metadata, fileInfo: FileInfo, propertyOptions?: any) {
         let hashKey = propertyOptions.transitive ? 'transitiveHash' : 'hash';
-        return metadata.get()[hashKey] === cacheProperty[hashKey];
+        return metadata.get()[hashKey] !== cacheProperty[hashKey];
     }
 
     function setPropertyClean(cacheProperty: any, metadata: Metadata, fileInfo: FileInfo, propertyOptions?: any) {
