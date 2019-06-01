@@ -9,7 +9,7 @@ import {
 import { TsConfig } from '../../dependencies/lib/types';
 
 export interface WasteNotConfig {
-    baseDirectory: string,
+    baseDirectory?: string,
     cacheDir?: string,
     files?: string[],
     hashAlgorithm?: string,
@@ -23,7 +23,7 @@ export interface WasteNotConfig {
     webpackConfig?: string
 
 }
-export default async function wastenot(config: WasteNotConfig) {
+export default async function wastenot(config: WasteNotConfig = {}) {
     let {
         baseDirectory = process.cwd(),
         cacheDir = '.waste-not',
