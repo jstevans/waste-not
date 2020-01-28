@@ -9,7 +9,7 @@ on:
 
 jobs:
   build:
-    if: github.event_name != "issue_comment" || (github.event.pull_request != null && github.event.comment.body == "/build")
+    if: github.event_name != 'issue_comment' || (github.event.pull_request != null && github.event.comment.body == '/build')
 
     runs-on: ${{ matrix.os }}
     strategy: 
