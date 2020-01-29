@@ -22,8 +22,9 @@ jobs:
       with:
         version: ${{ matrix.node_version }}
 
-    - name: Build & Test
-      run: |
-        yarn
-        yarn build
-        yarn test
+    - name: Yarn
+      run: yarn
+    - name: Build
+      run: yarn build
+    - name: Test
+      run: yarn test
