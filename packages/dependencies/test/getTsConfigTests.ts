@@ -1,3 +1,4 @@
+import * as path from 'path';
 import getTsConfig from "../lib/getTsConfig";
 
 describe("getTsConfig", () => {
