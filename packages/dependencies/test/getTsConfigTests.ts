@@ -18,7 +18,7 @@ describe("getTsConfig", () => {
         let options = {baseDirectory: "/", tsConfig};
 
         let mockTsConfig = {};
-        jest.mock("/TS_CONFIG_FILE", () => mockTsConfig, { virtual: true });
+        jest.mock(path.resolve(options.baseDirectory, "TS_CONFIG_FILE"), () => mockTsConfig, { virtual: true });
 
         let result = getTsConfig(options as any);
 
