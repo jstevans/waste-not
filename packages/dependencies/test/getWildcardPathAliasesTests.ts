@@ -68,7 +68,7 @@ describe("getWildcardPathAliases", () => {
         let result = getWildcardPathAliases(testValue, "./foo/fah.ts", "./", testConfig);
 
         expect(result).toEqual({
-            original: ["foo/barfaz*"],
+            original: [path.join("foo", "barfaz*")],
             aliases: []
         });
     })
