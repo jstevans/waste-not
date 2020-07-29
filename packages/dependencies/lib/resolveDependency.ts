@@ -3,16 +3,17 @@ import { Options } from "./types";
 import cabinet from "./wrappers/cabinet";
 
 export default function resolveDependency(
-    ast: File, 
-    dependency: string, 
-    filePath: string, 
-    options: Options) {
-    return cabinet({
-        partial: dependency,
-        filename: filePath,
-        directory: options.baseDirectory,
-        ast,
-        config: options ? options.requireJsConfig : undefined,
-        ...options
-    })
+  ast: File,
+  dependency: string,
+  filePath: string,
+  options: Options
+) {
+  return cabinet({
+    partial: dependency,
+    filename: filePath,
+    directory: options.baseDirectory,
+    ast,
+    config: options.requireJsConfig,
+    ...options,
+  });
 }

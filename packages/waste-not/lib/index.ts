@@ -1,11 +1,12 @@
-import * as globby from "globby";
 import initializeCache from "../../cache/lib/index";
 import processFiles, {
   ProcessFilesOptions,
 } from "../../graph-hashes/lib/processFiles";
 import { FileInfo, Metadata, PropertyGetter } from "../../cache/lib/types";
-import { TsConfig, FileOrGroup, FileGroup } from "../../dependencies/lib/types";
+import { TsConfig } from "../../dependencies/lib/types";
+import getAllFiles from "./getAllFiles";
 
+export type NodeModulesResolution = "file" | "package";
 export interface WasteNotConfig {
   baseDirectory?: string;
   cacheDir?: string;
@@ -17,7 +18,7 @@ export interface WasteNotConfig {
     overwrite?: boolean;
   };
   optimizations?: {
-    nodeModulesResolution?: "file" | "package";
+    nodeModulesResolution?: NodeModulesResolution;
   };
   tsConfig?: string | TsConfig;
   requireJsConfig?: string;
@@ -72,40 +73,7 @@ export default async function wastenot(config: WasteNotConfig = {}) {
     return getProperty;
   }
 
-  let allFilePaths: string[] = globby.sync(files, {
-    unique: true,
-    onlyFiles: true,
-  });
-  let allFiles: Record<string, FileOrGroup> = {};
-  let fileGroups: Record<string, FileGroup> = {};
-
-  for (const filePath of allFilePaths) {
-    const pathParts = filePath.split("/");
-    const nmIndex = pathParts.lastIndexOf("node_modules");
-
-    if (nmIndex == -1 || nodeModulesResolution !== "package") {
-      // a non-node_modules file -- add the filePath as an independent
-      allFiles[filePath] = filePath;
-    } else {
-      // a node_modules file -- create/add a new group if necessary, and
-      // add this filePath to the group.
-      const isScoped = pathParts[nmIndex + 1][0] === "@";
-      const packagePath = pathParts
-        .slice(0, nmIndex + (isScoped ? 3 : 2))
-        .join("/");
-
-      if (!fileGroups[packagePath]) {
-        fileGroups[packagePath] = {
-          type: "package",
-          basePath: packagePath,
-          filePaths: [],
-        };
-      }
-
-      fileGroups[packagePath].filePaths.push(filePath);
-      allFiles[filePath] = fileGroups[packagePath];
-    }
-  }
+  let allFiles = getAllFiles(files, nodeModulesResolution);
 
   let { graph, components } = await processFiles(
     allFiles,

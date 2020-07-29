@@ -21,8 +21,6 @@ export type PackageResolver = (
   dep: string,
   opts?: {
     basedir: string;
-    package: any;
-    extensions: string[];
   }
 ) => string;
 
@@ -39,7 +37,7 @@ export type Overrides = {
 
 export type ScriptParser = typeof parser;
 
-export type DependencyGetter<T extends FileOrGroup = string> = (
+export type DependencyGetter<T extends FileOrGroup = FileOrGroup> = (
   filePath: T,
   code?: string
 ) => MaybeDependencies;

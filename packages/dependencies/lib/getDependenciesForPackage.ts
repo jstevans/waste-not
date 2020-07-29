@@ -12,26 +12,35 @@ import {
   buildDependenciesBagWarningsOnly,
   buildDependenciesBag,
 } from "./utilities/buildDependenciesBag";
-import * as path from 'path';
 
-const configureResolvePackage = function configureResolvePackage(allFiles: Record<string, FileOrGroup>): PackageResolver {
-    return function resolvePackage(dep, opts?) {
-        for(let {basedir = __dirname} = opts || {}; basedir !== path.dirname(basedir); basedir = path.dirname(basedir)) {
-            const depPath = path.join(basedir, "node_modules", dep, 'package.json');
-            if (allFiles[depPath]) {
-                return depPath;
-            }
-        }
-        throw `Could not resolve dependency '${dep}' from '${ opts && opts.basedir || "unknown"}'`
-}
-}
+export const configureResolvePackage = function configureResolvePackage(
+  allFiles: Record<string, FileOrGroup>
+): PackageResolver {
+  return function resolvePackage(dep, opts?) {
+    let pathParts = ((opts && opts.basedir) || __dirname).split("/");
+    for (let i = pathParts.length; i >= 0; i--) {
+      const basePath = pathParts.slice(0, i).join("/");
+      const depPath = `${basePath}${
+        basePath.length > 0 ? "/" : ""
+      }node_modules/${dep}/package.json`;
+      if (allFiles[depPath]) {
+        return depPath;
+      }
+    }
+    throw new Error(
+      `Could not resolve dependency '${dep}' from '${
+        (opts && opts.basedir) || "unknown"
+      }'`
+    );
+  };
+};
 
 export default function configure(
   allFiles: Record<string, FileOrGroup>,
   options: Options,
   overrides: Overrides = {}
 ): DependencyGetter<FileGroup> {
-  const { packageResolver =  configureResolvePackage(allFiles)} = overrides;
+  const { packageResolver = configureResolvePackage(allFiles) } = overrides;
 
   return function getDependenciesForPackage(
     fileGroup: FileGroup
@@ -42,33 +51,32 @@ export default function configure(
       ]);
     }
 
-    let packageJsons = fileGroup.filePaths
-      .filter((fp) => /(^|[^A-Za-z0-9\.])package\.json$/.test(fp))
-      .map((path) => JSON.parse(readFileSync(path, "utf8")));
+    let packageJsonPaths = fileGroup.filePaths.filter((fp) =>
+      /(^|[^A-Za-z0-9\.])package\.json$/.test(fp)
+    );
 
-    if (packageJsons.length == 0) {
+    if (packageJsonPaths.length == 0) {
       return buildDependenciesBagWarningsOnly(fileGroup.basePath, [
         `No package.json for FileGroup: '${fileGroup.basePath}' does not have a package.json, so no dependencies were extracted.`,
       ]);
     }
 
-    let dependencies = packageJsons
-      .map((pj) =>
-        [
-          ...Object.keys(pj.dependencies || {}),
-          ...Object.keys(pj.optionalDependencies || {}),
-          ...Object.keys(pj.peerDependencies || {}),
-        ].map((dep) =>
-                packageResolver(dep, {
-            basedir: fileGroup.basePath,
-            package: pj,
-            extensions: [".js", ".d.ts"]
-          })
-        
-        )
-      )
-      .reduce((acc, e) => [...acc, ...e]);
+    let packageJsonPath = packageJsonPaths.reduce((shortest, current) =>
+      shortest.length > current.length ? current : shortest
+    );
 
-    return buildDependenciesBag(fileGroup.basePath, dependencies);
+    let packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8"));
+
+    let dependencies = [
+      ...Object.keys(packageJson.dependencies || {}),
+      ...Object.keys(packageJson.optionalDependencies || {}),
+      ...Object.keys(packageJson.peerDependencies || {}),
+    ].map((dep) =>
+      packageResolver(dep, {
+        basedir: fileGroup.basePath,
+      })
+    );
+
+    return buildDependenciesBag(packageJsonPath, dependencies);
   };
 }

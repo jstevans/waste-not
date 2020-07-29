@@ -10,8 +10,7 @@ export default function configure(
     let getDependenciesForFile = configureGetDependenciesForFile(allFiles, options, overrides);
     let getDependenciesForPackage = configureGetDependenciesForPackage(allFiles, options, overrides);
     
-    return function getDependencies(filePath: string, code?: string) {
-        const fileOrGroup = allFiles[filePath];
+    return function getDependencies(fileOrGroup: FileOrGroup, code?: string) {
         return typeof fileOrGroup === 'object' ?
             getDependenciesForPackage(fileOrGroup) :
             getDependenciesForFile(fileOrGroup, code);

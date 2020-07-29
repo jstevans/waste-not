@@ -49,7 +49,7 @@ describe("configureGetDependencies", () => {
       jest
         .spyOn(getDependenciesForPackage, "default")
         .mockReturnValue(getDepsForPkgMock);
-      const getDependencies = configureGetDependencies({"foo": "foo"} as any, {} as any);
+      const getDependencies = configureGetDependencies({} as any, {} as any);
 
       getDependencies("foo");
 
@@ -67,9 +67,9 @@ describe("configureGetDependencies", () => {
       jest
         .spyOn(getDependenciesForPackage, "default")
         .mockReturnValue(getDepsForPkgMock);
-      const getDependencies = configureGetDependencies({"foo": {}} as any, {} as any);
+      const getDependencies = configureGetDependencies({} as any, {} as any);
 
-      getDependencies("foo");
+      getDependencies({} as any);
 
       expect(getDepsForFileMock).not.toHaveBeenCalled();
       expect(getDepsForPkgMock).toHaveBeenCalledTimes(1);
