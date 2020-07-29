@@ -5,14 +5,15 @@ import { FileOrGroup, Options, Overrides, DependencyGetter } from './types';
 export default function configure(
     allFiles: Record<string, FileOrGroup>,
     options: Options,
-    overrides?: Overrides): DependencyGetter<FileOrGroup> {
+    overrides?: Overrides): DependencyGetter {
         
     let getDependenciesForFile = configureGetDependenciesForFile(allFiles, options, overrides);
     let getDependenciesForPackage = configureGetDependenciesForPackage(allFiles, options, overrides);
     
-    return function getDependencies(fileOrGroup: FileOrGroup, code?: string) {
-        return typeof fileOrGroup === 'string' ?
-            getDependenciesForFile(fileOrGroup, code) :
-            getDependenciesForPackage(fileOrGroup);
+    return function getDependencies(filePath: string, code?: string) {
+        const fileOrGroup = allFiles[filePath];
+        return typeof fileOrGroup === 'object' ?
+            getDependenciesForPackage(fileOrGroup) :
+            getDependenciesForFile(fileOrGroup, code);
     };
 }

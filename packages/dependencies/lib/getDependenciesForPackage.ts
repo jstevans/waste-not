@@ -5,20 +5,33 @@ import {
   DependencyGetter,
   FileGroup,
   MaybeDependencies,
+  PackageResolver,
 } from "./types";
 import readFileSync from "./wrappers/readFileSync";
-import * as resolve from "resolve";
 import {
   buildDependenciesBagWarningsOnly,
   buildDependenciesBag,
 } from "./utilities/buildDependenciesBag";
+import * as path from 'path';
+
+const configureResolvePackage = function configureResolvePackage(allFiles: Record<string, FileOrGroup>): PackageResolver {
+    return function resolvePackage(dep, opts?) {
+        for(let {basedir = __dirname} = opts || {}; basedir !== path.dirname(basedir); basedir = path.dirname(basedir)) {
+            const depPath = path.join(basedir, "node_modules", dep, 'package.json');
+            if (allFiles[depPath]) {
+                return depPath;
+            }
+        }
+        throw `Could not resolve dependency '${dep}' from '${ opts && opts.basedir || "unknown"}'`
+}
+}
 
 export default function configure(
   allFiles: Record<string, FileOrGroup>,
   options: Options,
   overrides: Overrides = {}
 ): DependencyGetter<FileGroup> {
-  const { packageResolver = resolve.sync } = overrides;
+  const { packageResolver =  configureResolvePackage(allFiles)} = overrides;
 
   return function getDependenciesForPackage(
     fileGroup: FileGroup
@@ -46,10 +59,12 @@ export default function configure(
           ...Object.keys(pj.optionalDependencies || {}),
           ...Object.keys(pj.peerDependencies || {}),
         ].map((dep) =>
-          packageResolver(dep, {
+                packageResolver(dep, {
             basedir: fileGroup.basePath,
             package: pj,
+            extensions: [".js", ".d.ts"]
           })
+        
         )
       )
       .reduce((acc, e) => [...acc, ...e]);

@@ -1,29 +1,6 @@
 import getDependenciesForPackage from "../lib/getDependenciesForPackage";
 import { buildDependenciesBagWarningsOnly } from "../lib/utilities/buildDependenciesBag";
 import * as readFileSync from "../lib/wrappers/readFileSync";
-import * as resolve from "resolve";
-type CallInfo = {
-  fnName: string;
-  args: any[];
-};
-function makeTestUtils(calls: CallInfo[]) {
-  function makeLoggingMock<
-    F extends (...args: any[]) => any,
-    R extends ReturnType<F>
-  >(fnName: string, retValue: R) {
-    return function addCallInfo(...args: Parameters<F>): R {
-      calls.push({
-        fnName,
-        args,
-      });
-      return retValue;
-    };
-  }
-
-  return {
-    makeLoggingMock,
-  };
-}
 
 describe("getDependenciesForPackage", () => {
   describe("configure", () => {

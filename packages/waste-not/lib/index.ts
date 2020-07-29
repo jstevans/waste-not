@@ -72,16 +72,16 @@ export default async function wastenot(config: WasteNotConfig = {}) {
     return getProperty;
   }
 
-  let allFilePaths: FileOrGroup[] = globby.sync(files, {
+  let allFilePaths: string[] = globby.sync(files, {
     unique: true,
     onlyFiles: true,
   });
   let allFiles: Record<string, FileOrGroup> = {};
   let fileGroups: Record<string, FileGroup> = {};
 
-  for (const filePath in allFilePaths) {
+  for (const filePath of allFilePaths) {
     const pathParts = filePath.split("/");
-    const nmIndex = filePath.lastIndexOf("node_modules");
+    const nmIndex = pathParts.lastIndexOf("node_modules");
 
     if (nmIndex == -1 || nodeModulesResolution !== "package") {
       // a non-node_modules file -- add the filePath as an independent
@@ -89,9 +89,9 @@ export default async function wastenot(config: WasteNotConfig = {}) {
     } else {
       // a node_modules file -- create/add a new group if necessary, and
       // add this filePath to the group.
-      const isScoped = filePath[nmIndex + 1][0] === "@";
+      const isScoped = pathParts[nmIndex + 1][0] === "@";
       const packagePath = pathParts
-        .slice(0, nmIndex + (isScoped ? 2 : 3))
+        .slice(0, nmIndex + (isScoped ? 3 : 2))
         .join("/");
 
       if (!fileGroups[packagePath]) {
